@@ -1,5 +1,4 @@
 export enum GrayColor {
-  White = '#FFFFFF',
   OffWhite = '#F9F9F9',
   Gray030 = '#F5F6F7',
   Gray050 = '#EFEFF1',
@@ -15,5 +14,4 @@ export enum GrayColor {
   Gray800 = '#383D4F',
   Gray900 = '#262A38',
   Gray950 = '#171A24',
-  Black = '#000000',
 }
