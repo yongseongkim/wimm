@@ -1,7 +1,8 @@
 import {AppComponentsProvider} from '@/AppComponents';
 import RootScreen from '@/RootScreen';
+import {Color} from '@/colors';
 import React from 'react';
-import {StatusBar, useColorScheme} from 'react-native';
+import {Platform, StatusBar, useColorScheme} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -19,7 +20,12 @@ function App(): JSX.Element {
       <SafeAreaProvider>
         <AppComponentsProvider>
           <StatusBar
-            barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+            barStyle={
+              // TODO: DarkMode 대응
+              Platform.OS === 'android' && isDarkMode
+                ? 'light-content'
+                : 'dark-content'
+            }
             backgroundColor={backgroundStyle.backgroundColor}
           />
           <RootScreen />

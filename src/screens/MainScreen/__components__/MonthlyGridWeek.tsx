@@ -9,7 +9,8 @@ interface PropsType {
   week: number;
 }
 
-const MonthlyGridWeek = ({style}: PropsType) => {
+const MonthlyGridWeek = ({style, year, month, week}: PropsType) => {
+
   return (
     <Container style={style}>
       <MonthlyGridDayItemWrapper

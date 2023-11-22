@@ -2,13 +2,16 @@ import React from 'react';
 import {ScrollView} from 'react-native';
 import styled from 'styled-components/native';
 import MonthlyGridView from './__components__/MonthlyGridView';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const MainScreen = () => {
   return (
     <ScrollView>
-      <Container>
-        <MonthlyGridView />
-      </Container>
+      <SafeAreaView>
+        <Container>
+          <MonthlyGridView />
+        </Container>
+      </SafeAreaView>
     </ScrollView>
   );
 };

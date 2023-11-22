@@ -6,14 +6,22 @@ import styled from 'styled-components/native';
 import {Color} from '@/colors';
 import MonthlyGridWeekHeader from './MonthlyGridWeekHeader';
 
-const MonthlyGridView = () => {
+interface PropsType {
+  year: number;
+  month: number;
+}
+
+const MonthlyGridView = ({year, month}: PropsType) => {
+
+
   return (
     <Container>
       <MonthlyGridWeekHeader />
-      <MonthlyGridWeek />
-      <MonthlyGridWeek />
-      <MonthlyGridWeek />
-      <MonthlyGridWeek />
+      <MonthlyGridWeek year={year} month={month} week={0} />
+      <MonthlyGridWeek year={year} month={month} week={0} />
+      <MonthlyGridWeek year={year} month={month} week={0} />
+      <MonthlyGridWeek year={year} month={month} week={0} />
+      <MonthlyGridWeek year={year} month={month} week={0} />
     </Container>
   );
 };
