@@ -1,60 +1,62 @@
+import isNull from 'lodash/isNull';
 import React from 'react';
+import {View} from 'react-native';
 import styled from 'styled-components/native';
 import MonthlyGridDayItem from './MonthlyGridDayItem';
 
 interface PropsType {
   style?: any;
-  year: number;
-  month: number;
   week: number;
+  startOfFirstWeek: number;
+  daysInMonth: number;
+  selectedDay?: number;
+  onPressDay?: (day: number) => void;
 }
 
-const MonthlyGridWeek = ({style, year, month, week}: PropsType) => {
-
+const MonthlyGridWeek = ({
+  style,
+  week,
+  startOfFirstWeek,
+  daysInMonth,
+  selectedDay,
+  onPressDay,
+}: PropsType) => {
+  let days;
+  // days:
+  // null, null, null, 1, 2, 3, 4
+  // ...
+  // 26, 27, 28, 29, 30, null, null
+  const isFirstWeek = week === 0;
+  if (isFirstWeek) {
+    days = Array(startOfFirstWeek)
+      .fill(null)
+      .concat(
+        [...Array(7 - startOfFirstWeek).keys()].map((_, index) => index + 1),
+      );
+  } else {
+    days = [...Array(7).keys()].map((_, index) => {
+      const day = 7 - startOfFirstWeek + (week - 1) * 7 + index + 1;
+      return daysInMonth >= day ? day : null;
+    });
+  }
   return (
     <Container style={style}>
-      <MonthlyGridDayItemWrapper
-        day={1}
-        income={1700000}
-        expense={9990000}
-        isSelected={true}
-      />
-      <MonthlyGridDayItemWrapper
-        day={1}
-        income={1700000}
-        expense={9990000}
-        isSelected={true}
-      />
-      <MonthlyGridDayItemWrapper
-        day={1}
-        income={1700000}
-        expense={9990000}
-        isSelected={true}
-      />
-      <MonthlyGridDayItemWrapper
-        day={1}
-        income={1700000}
-        expense={9990000}
-        isSelected={true}
-      />
-      <MonthlyGridDayItemWrapper
-        day={1}
-        income={1700000}
-        expense={9990000}
-        isSelected={true}
-      />
-      <MonthlyGridDayItemWrapper
-        day={1}
-        income={1700000}
-        expense={9990000}
-        isSelected={true}
-      />
-      <MonthlyGridDayItemWrapper
-        day={1}
-        income={1700000}
-        expense={9990000}
-        isSelected={true}
-      />
+      {days.map((day, index) =>
+        isNull(day) ? (
+          <View key={`${week}_${index}`} style={{flex: 1}} />
+        ) : (
+          <MonthlyGridDayItemWrapper
+            key={day}
+            day={day}
+            income={1990000}
+            expense={9990000}
+            isSelected={day === selectedDay}
+            onPress={() => {
+              day && onPressDay?.(day);
+            }}
+          />
+        ),
+      )}
     </Container>
   );
 };

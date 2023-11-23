@@ -1,5 +1,6 @@
 import {Color} from '@/colors';
 import React from 'react';
+import {TouchableHighlight} from 'react-native';
 import styled from 'styled-components/native';
 
 interface PropsType {
@@ -8,6 +9,7 @@ interface PropsType {
   income?: number;
   expense?: number;
   isSelected: boolean;
+  onPress?: () => void;
 }
 
 const MonthlyGridDayItem = ({
@@ -16,30 +18,33 @@ const MonthlyGridDayItem = ({
   income,
   expense,
   isSelected,
+  onPress,
 }: PropsType) => {
   return (
-    <Container style={style}>
-      <DayText
-        allowFontScaling={false}
-        textColor={isSelected ? Color.White : Color.Blue600}
-        backgroundColor={isSelected ? Color.Blue600 : Color.Transparent}>
-        {day}
-      </DayText>
-      <Contents>
-        <IncomeText
+    <TouchableHighlight style={style} onPress={onPress}>
+      <Container>
+        <DayText
           allowFontScaling={false}
-          numberOfLines={1}
-          textColor={Color.Blue500}>
-          {income}
-        </IncomeText>
-        <ExpenseText
-          allowFontScaling={false}
-          numberOfLines={1}
-          textColor={Color.Red600}>
-          {expense}
-        </ExpenseText>
-      </Contents>
-    </Container>
+          textColor={isSelected ? Color.White : Color.Blue600}
+          backgroundColor={isSelected ? Color.Blue600 : Color.Transparent}>
+          {day}
+        </DayText>
+        <Contents>
+          <IncomeText
+            allowFontScaling={false}
+            numberOfLines={1}
+            textColor={Color.Blue500}>
+            {income}
+          </IncomeText>
+          <ExpenseText
+            allowFontScaling={false}
+            numberOfLines={1}
+            textColor={Color.Red600}>
+            {expense}
+          </ExpenseText>
+        </Contents>
+      </Container>
+    </TouchableHighlight>
   );
 };
 
