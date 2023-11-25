@@ -1,4 +1,5 @@
 import {Color} from '@/colors';
+import {Transaction} from '@/models';
 import React from 'react';
 import {TouchableHighlight} from 'react-native';
 import styled from 'styled-components/native';
@@ -6,8 +7,7 @@ import styled from 'styled-components/native';
 interface PropsType {
   style?: any;
   day?: number;
-  income?: number;
-  expense?: number;
+  transactions: Transaction[];
   isSelected: boolean;
   onPress?: () => void;
 }
@@ -15,11 +15,18 @@ interface PropsType {
 const MonthlyGridDayItem = ({
   style,
   day,
-  income,
-  expense,
+  transactions,
   isSelected,
   onPress,
 }: PropsType) => {
+  const income = transactions
+    .filter(t => t.value > 0)
+    .reduce((acc, cur) => acc + cur.value, 0);
+  const expense = Math.abs(
+    transactions
+      .filter(t => t.value < 0)
+      .reduce((acc, cur) => acc + cur.value, 0),
+  );
   return (
     <TouchableHighlight style={style} onPress={onPress}>
       <Container>
@@ -34,13 +41,13 @@ const MonthlyGridDayItem = ({
             allowFontScaling={false}
             numberOfLines={1}
             textColor={Color.Blue500}>
-            {income}
+            {`+${income}`}
           </IncomeText>
           <ExpenseText
             allowFontScaling={false}
             numberOfLines={1}
             textColor={Color.Red600}>
-            {expense}
+            {`-${expense}`}
           </ExpenseText>
         </Contents>
       </Container>

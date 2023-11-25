@@ -1,7 +1,9 @@
 import isNull from 'lodash/isNull';
 import React from 'react';
 import {View} from 'react-native';
+import {useRecoilValue} from 'recoil';
 import styled from 'styled-components/native';
+import {transactionsState} from '../MainScreen';
 import MonthlyGridDayItem from './MonthlyGridDayItem';
 
 interface PropsType {
@@ -39,6 +41,9 @@ const MonthlyGridWeek = ({
       return daysInMonth >= day ? day : null;
     });
   }
+
+  const transactions = useRecoilValue(transactionsState);
+
   return (
     <Container style={style}>
       {days.map((day, index) =>
@@ -48,8 +53,7 @@ const MonthlyGridWeek = ({
           <MonthlyGridDayItemWrapper
             key={day}
             day={day}
-            income={1990000}
-            expense={9990000}
+            transactions={transactions.filter(t => t.tradedAt.getDay() === day)}
             isSelected={day === selectedDay}
             onPress={() => {
               day && onPressDay?.(day);

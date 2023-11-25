@@ -21,7 +21,6 @@ const MonthlyStatisticsView = ({
   onPressPreviousMonth,
   onPressNextMonth,
 }: PropsType) => {
-  console.log(year, month);
   return (
     <Container>
       <SelectedMonthContainer>
