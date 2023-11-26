@@ -1,7 +1,7 @@
 import {SpoqaHanSans} from '@/assets';
 import {Color} from '@/colors';
 import React from 'react';
-import {TouchableHighlight} from 'react-native';
+import {Pressable, Text, TouchableHighlight, View} from 'react-native';
 import styled from 'styled-components/native';
 
 interface PropsType {
@@ -11,6 +11,7 @@ interface PropsType {
   expense: number;
   onPressPreviousMonth: () => void;
   onPressNextMonth: () => void;
+  onPressAddTransaction: () => void;
 }
 
 const MonthlyStatisticsView = ({
@@ -20,6 +21,7 @@ const MonthlyStatisticsView = ({
   expense,
   onPressPreviousMonth,
   onPressNextMonth,
+  onPressAddTransaction,
 }: PropsType) => {
   return (
     <Container>
@@ -32,27 +34,52 @@ const MonthlyStatisticsView = ({
           <SelectedMonthMover>{'>'}</SelectedMonthMover>
         </TouchableHighlight>
       </SelectedMonthContainer>
-      <StatisticsContainer>
-        <StatisticsRow>
-          <StatisticsRowTitle>수입</StatisticsRowTitle>
-          <StatisticsRowValue>
-            {Intl.NumberFormat('ko-KR', {
-              style: 'currency',
-              currency: 'KRW',
-            }).format(income)}
-          </StatisticsRowValue>
-        </StatisticsRow>
-        <StatisticsRowSpacer />
-        <StatisticsRow>
-          <StatisticsRowTitle>지출</StatisticsRowTitle>
-          <StatisticsRowValue>
-            {Intl.NumberFormat('ko-KR', {
-              style: 'currency',
-              currency: 'KRW',
-            }).format(expense)}
-          </StatisticsRowValue>
-        </StatisticsRow>
-      </StatisticsContainer>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginTop: 10,
+        }}>
+        <StatisticsContainer>
+          <StatisticsRow>
+            <StatisticsRowTitle>수입</StatisticsRowTitle>
+            <StatisticsRowValue>
+              {Intl.NumberFormat('ko-KR', {
+                style: 'currency',
+                currency: 'KRW',
+              }).format(income)}
+            </StatisticsRowValue>
+          </StatisticsRow>
+          <StatisticsRowSpacer />
+          <StatisticsRow>
+            <StatisticsRowTitle>지출</StatisticsRowTitle>
+            <StatisticsRowValue>
+              {Intl.NumberFormat('ko-KR', {
+                style: 'currency',
+                currency: 'KRW',
+              }).format(expense)}
+            </StatisticsRowValue>
+          </StatisticsRow>
+        </StatisticsContainer>
+        <Pressable
+          style={{
+            width: 100,
+            height: 32,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: Color.Blue600,
+          }}
+          onPress={onPressAddTransaction}>
+          <Text
+            style={{
+              color: Color.White,
+              fontSize: 15,
+              fontFamily: SpoqaHanSans.Bold,
+            }}>
+            추가
+          </Text>
+        </Pressable>
+      </View>
     </Container>
   );
 };
@@ -82,8 +109,8 @@ const SelectedMonth = styled.Text`
 `;
 
 const StatisticsContainer = styled.View`
+  flex: 1;
   flex-direction: column;
-  margin-top: 10px;
 `;
 
 const StatisticsRowSpacer = styled.View`

@@ -7,3 +7,5 @@ export enum SpoqaHanSans {
   Light = 'SpoqaHanSansNeo-Light', // 300
   Thin = 'SpoqaHanSansNeo-Thin', // 100
 }
+
+export {default as XMark} from './img/xmark.svg';

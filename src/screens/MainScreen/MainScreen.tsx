@@ -14,7 +14,7 @@ export const transactionsState = atom<Transaction[]>({
   default: [],
 });
 
-const MainScreen = () => {
+const MainScreen = ({navigation}: any) => {
   const [selectedMonth, setSelectedMonth] = useState(moment().startOf('month'));
   const year = selectedMonth.year();
   const month = selectedMonth.month() + 1;
@@ -64,6 +64,9 @@ const MainScreen = () => {
             }}
             onPressNextMonth={() => {
               setSelectedMonth(selectedMonth.add(+1, 'month').clone());
+            }}
+            onPressAddTransaction={() => {
+              navigation.navigate('TransactionForm');
             }}
           />
           <MonthlyGridView year={year} month={month} />
