@@ -1,13 +1,17 @@
-import React from 'react';
-import {Pressable} from 'react-native';
+import React, {useState} from 'react';
+import {Pressable, Text, View} from 'react-native';
 
 import {SpoqaHanSans, XMark} from '@/assets';
 import {Color} from '@/colors';
+import {Category} from '@/models';
 import styled from 'styled-components/native';
+import CategorySelector from './__components__/CategorySelector';
 
 export interface TransactionFormPropsType {}
 
 const TransactionFormScreen = ({navigation}: any) => {
+  const [selectedCategory, setSelectedCategory] = useState(Category.Other);
+
   return (
     <Container>
       <AppBar>
@@ -28,6 +32,13 @@ const TransactionFormScreen = ({navigation}: any) => {
         <ValueInput textAlign={'right'} inputMode={'decimal'} />
         <ValueUnit>원</ValueUnit>
       </ValueInputContainer>
+
+      <CategorySelector
+        selectedCategory={selectedCategory}
+        onChangeSelectedCategory={c => {
+          setSelectedCategory(c);
+        }}
+      />
     </Container>
   );
 };
