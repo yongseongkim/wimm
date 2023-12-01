@@ -53,7 +53,9 @@ const MonthlyGridWeek = ({
           <MonthlyGridDayItemWrapper
             key={day}
             day={day}
-            transactions={transactions.filter(t => t.tradedAt.getDay() === day)}
+            transactions={transactions.filter(
+              t => t.tradedAt.getDate() === day,
+            )}
             isSelected={day === selectedDay}
             onPress={() => {
               day && onPressDay?.(day);

@@ -13,6 +13,13 @@ class TransactionManager {
     return this._instance;
   }
 
+  public async clearAll() {
+    const transactionKeys = (await AsyncStorage.getAllKeys()).filter(key =>
+      key.startsWith('@transactions'),
+    );
+    await AsyncStorage.multiRemove(transactionKeys);
+  }
+
   public async getTransactions(
     year: number,
     month: number,

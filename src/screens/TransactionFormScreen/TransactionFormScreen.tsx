@@ -7,7 +7,9 @@ import {Category} from '@/models';
 import {TransactionManager} from '@/utils';
 import {isEmpty, isUndefined} from 'lodash';
 import DatePicker from 'react-native-date-picker';
+import {useRecoilState} from 'recoil';
 import styled from 'styled-components/native';
+import {transactionsState} from '../MainScreen/MainScreen';
 import TransactionType from './TransactionType';
 import CategorySelector from './__components__/CategorySelector';
 import IncomeExpenseSelector from './__components__/IncomeExpenseSelector';
@@ -18,6 +20,9 @@ const TransactionFormScreen = ({navigation}: any) => {
   const [transactionType, setTransactionType] = useState<
     TransactionType | undefined
   >();
+
+  const [transactions, setTransactions] = useRecoilState(transactionsState);
+
   const [value, setValue] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState(Category.Other);
   const [isDateTimePickerOpen, setIsDateTimePickerOpen] = useState(false);
@@ -35,13 +40,15 @@ const TransactionFormScreen = ({navigation}: any) => {
       return;
     }
 
-    await TransactionManager.getInstance().insertTransaction({
+    const inserted = await TransactionManager.getInstance().insertTransaction({
       title,
       description,
       category: selectedCategory,
       value: transactionType === TransactionType.Income ? value : -value,
       tradedAt: selectedDateTime,
     });
+    setTransactions(transactions.concat(inserted));
+
     navigation.goBack();
   };
 

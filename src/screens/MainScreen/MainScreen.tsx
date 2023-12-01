@@ -34,7 +34,6 @@ const MainScreen = ({navigation}: any) => {
           year,
           month,
         );
-        console.log(result);
         setTransactions(result);
       } catch (e) {
         console.log(e);
