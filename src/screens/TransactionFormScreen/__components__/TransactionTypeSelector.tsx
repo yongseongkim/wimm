@@ -10,7 +10,7 @@ interface PropsType {
   onPressType?: (type: TransactionType) => void;
 }
 
-const IncomeExpenseSelector = ({type, onPressType}: PropsType) => {
+const TransactionTypeSelector = ({type, onPressType}: PropsType) => {
   const isIncome = !isUndefined(type) && type === TransactionType.Income;
   const isExpense = !isUndefined(type) && type === TransactionType.Expense;
   return (
@@ -22,6 +22,7 @@ const IncomeExpenseSelector = ({type, onPressType}: PropsType) => {
         }}>
         <ItemText isSelected={isIncome}>수입</ItemText>
       </Item>
+      <Spacer />
       <Item
         isSelected={isExpense}
         onPress={() => {
@@ -33,15 +34,15 @@ const IncomeExpenseSelector = ({type, onPressType}: PropsType) => {
   );
 };
 
-export default IncomeExpenseSelector;
+export default TransactionTypeSelector;
 
 const Container = styled.View({
   flexDirection: 'row',
 });
 
 const Item = styled.Pressable<{isSelected: boolean}>`
-  padding: 10px;
-  border-width: 2px;
+  padding: 7px 10px;
+  border-width: 1px;
   border-color: ${({isSelected}) =>
     isSelected ? Color.Blue600 : Color.Gray600};
   border-radius: 4px;
@@ -49,6 +50,10 @@ const Item = styled.Pressable<{isSelected: boolean}>`
 
 const ItemText = styled.Text<{isSelected: boolean}>`
   color: ${({isSelected}) => (isSelected ? Color.Blue600 : Color.Gray600)};
-  font-size: 18px;
+  font-size: 16px;
   font-family: ${SpoqaHanSans.Regular};
 `;
+
+const Spacer = styled.View({
+  width: 10,
+});

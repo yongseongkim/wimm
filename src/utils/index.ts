@@ -1,3 +1,4 @@
+import DateFormatter from './DateFormatter';
 import TransactionManager from './TransactionManager';
 
-export {TransactionManager};
+export {DateFormatter, TransactionManager};
