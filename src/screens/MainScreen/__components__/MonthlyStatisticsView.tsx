@@ -1,7 +1,7 @@
-import {SpoqaHanSans} from '@/assets';
-import {Color} from '@/colors';
+import {GreaterThan, LessThan, SpoqaHanSans} from '@/assets';
+import {Color, ColorUtils} from '@/colors';
 import React from 'react';
-import {Pressable, Text, TouchableHighlight, View} from 'react-native';
+import {Pressable, Text, View} from 'react-native';
 import styled from 'styled-components/native';
 
 interface PropsType {
@@ -23,16 +23,29 @@ const MonthlyStatisticsView = ({
   onPressNextMonth,
   onPressAddTransaction,
 }: PropsType) => {
+  const moveIconSize = 12;
   return (
     <Container>
       <SelectedMonthContainer>
-        <TouchableHighlight onPress={onPressPreviousMonth}>
-          <SelectedMonthMover>{'<'}</SelectedMonthMover>
-        </TouchableHighlight>
+        <SelectedMonthMover
+          underlayColor={ColorUtils.WithOpacity(Color.Blue500, 50)}
+          onPress={onPressPreviousMonth}>
+          <LessThan
+            width={moveIconSize}
+            height={moveIconSize}
+            color={Color.Black}
+          />
+        </SelectedMonthMover>
         <SelectedMonth>{`${year}년 ${month}월`}</SelectedMonth>
-        <TouchableHighlight onPress={onPressNextMonth}>
-          <SelectedMonthMover>{'>'}</SelectedMonthMover>
-        </TouchableHighlight>
+        <SelectedMonthMover
+          underlayColor={ColorUtils.WithOpacity(Color.Blue500, 50)}
+          onPress={onPressNextMonth}>
+          <GreaterThan
+            width={moveIconSize}
+            height={moveIconSize}
+            color={Color.Black}
+          />
+        </SelectedMonthMover>
       </SelectedMonthContainer>
       <View
         style={{
@@ -93,13 +106,12 @@ const Container = styled.View`
 
 const SelectedMonthContainer = styled.View`
   flex-direction: row;
+  align-items: center;
 `;
 
-const SelectedMonthMover = styled.Text`
-  color: ${Color.Black};
-  padding: 0px 10px;
-  font-size: 20px;
-  font-family: ${SpoqaHanSans.Bold};
+const SelectedMonthMover = styled.TouchableHighlight`
+  margin: 0px 3px;
+  padding: 10px 10px;
 `;
 
 const SelectedMonth = styled.Text`

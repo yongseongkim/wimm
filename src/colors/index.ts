@@ -23,3 +23,9 @@ export const Color = {
   ...RedColor,
   ...PrimitiveColor,
 };
+
+export namespace ColorUtils {
+  export function WithOpacity(color: Color, opacity: number) {
+    return `${color}${opacity.toString(16)}`;
+  }
+}
