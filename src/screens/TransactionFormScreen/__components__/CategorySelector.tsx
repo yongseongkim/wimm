@@ -77,7 +77,7 @@ const Header = styled.View({
 
 const HeaderTitle = styled.Text({
   width: '30%',
-  color: Color.Gray600,
+  color: Color.Gray500,
   fontSize: 16,
   fontFamily: SpoqaHanSans.Regular,
 });

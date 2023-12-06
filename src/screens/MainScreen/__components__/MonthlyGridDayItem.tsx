@@ -28,11 +28,14 @@ const MonthlyGridDayItem = ({
       .reduce((acc, cur) => acc + cur.value, 0),
   );
   return (
-    <TouchableHighlight style={style} onPress={onPress}>
+    <TouchableHighlight
+      style={style}
+      underlayColor={Color.Transparent}
+      onPress={onPress}>
       <Container>
         <DayText
           allowFontScaling={false}
-          textColor={isSelected ? Color.White : Color.Blue600}
+          textColor={isSelected ? Color.White : Color.Gray500}
           backgroundColor={isSelected ? Color.Blue600 : Color.Transparent}>
           {day}
         </DayText>
@@ -40,13 +43,13 @@ const MonthlyGridDayItem = ({
           <IncomeText
             allowFontScaling={false}
             numberOfLines={1}
-            textColor={Color.Blue500}>
+            textColor={Color.Gray500}>
             {`+${income}`}
           </IncomeText>
           <ExpenseText
             allowFontScaling={false}
             numberOfLines={1}
-            textColor={Color.Red600}>
+            textColor={Color.Blue600}>
             {`-${expense}`}
           </ExpenseText>
         </Contents>
@@ -74,6 +77,7 @@ const DayText = styled.Text<{textColor: Color; backgroundColor: Color}>`
 const Contents = styled.View`
   margin-top: 5px;
   height: 45px;
+  align-items: center;
 `;
 
 const IncomeText = styled.Text<{textColor: Color}>`

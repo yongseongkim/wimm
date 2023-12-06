@@ -7,9 +7,16 @@ import MonthlyGridWeekHeader from './MonthlyGridWeekHeader';
 interface PropsType {
   year: number;
   month: number;
+  selectedDay?: number;
+  onSelectDate?: (date: Date) => void;
 }
 
-const MonthlyGridView = ({year, month}: PropsType) => {
+const MonthlyGridView = ({
+  year,
+  month,
+  selectedDay,
+  onSelectDate,
+}: PropsType) => {
   const firstDate = moment(`${year}-${month}`, 'YYYY-MM').startOf('month');
   const daysInMonth = firstDate.daysInMonth();
 
@@ -27,7 +34,12 @@ const MonthlyGridView = ({year, month}: PropsType) => {
             week={index}
             startOfFirstWeek={startOfFirstWeek}
             daysInMonth={daysInMonth}
-            selectedDay={25}
+            selectedDay={selectedDay}
+            onPressDay={day => {
+              onSelectDate?.(
+                moment(`${year}-${month}-${day}`, 'YYYY-MM-DD').toDate(),
+              );
+            }}
           />
         ))}
     </Container>
@@ -39,4 +51,5 @@ export default MonthlyGridView;
 const Container = styled.View`
   flex: 1;
   flex-direction: column;
+  padding: 0 4px;
 `;

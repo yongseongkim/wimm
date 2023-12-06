@@ -44,12 +44,12 @@ const Item = styled.Pressable<{isSelected: boolean}>`
   padding: 7px 10px;
   border-width: 1px;
   border-color: ${({isSelected}) =>
-    isSelected ? Color.Blue600 : Color.Gray600};
+    isSelected ? Color.Blue600 : Color.Gray500};
   border-radius: 4px;
 `;
 
 const ItemText = styled.Text<{isSelected: boolean}>`
-  color: ${({isSelected}) => (isSelected ? Color.Blue600 : Color.Gray600)};
+  color: ${({isSelected}) => (isSelected ? Color.Blue600 : Color.Gray500)};
   font-size: 16px;
   font-family: ${SpoqaHanSans.Regular};
 `;

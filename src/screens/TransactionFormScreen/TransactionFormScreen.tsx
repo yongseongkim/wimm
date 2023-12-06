@@ -108,7 +108,7 @@ const TransactionFormScreen = ({route, navigation}: any) => {
               editable={false}
               placeholder="선택해주세요"
               pointerEvents="none"
-              placeholderTextColor={Color.Gray600}>
+              placeholderTextColor={Color.Gray500}>
               {selectedDateTime && DateFormatter.formatInForm(selectedDateTime)}
             </CommonSectionValue>
           </CommonSection>
@@ -117,7 +117,7 @@ const TransactionFormScreen = ({route, navigation}: any) => {
             <CommonSectionTitle>{'장소 / 용도'}</CommonSectionTitle>
             <CommonSectionValue
               placeholder="입력해주세요"
-              placeholderTextColor={Color.Gray600}
+              placeholderTextColor={Color.Gray500}
               onChangeText={text => {
                 setTitle(text);
               }}
@@ -128,7 +128,7 @@ const TransactionFormScreen = ({route, navigation}: any) => {
             <CommonSectionTitle>상세 내용</CommonSectionTitle>
             <CommonSectionValue
               placeholder="입력해주세요 (선택)"
-              placeholderTextColor={Color.Gray600}
+              placeholderTextColor={Color.Gray500}
               onChangeText={text => {
                 setDescription(text);
               }}
@@ -193,7 +193,7 @@ const CommonSection = styled.TouchableOpacity({
 
 const CommonSectionTitle = styled.Text({
   width: '30%',
-  color: Color.Gray600,
+  color: Color.Gray500,
   fontSize: 16,
   fontFamily: SpoqaHanSans.Regular,
 });

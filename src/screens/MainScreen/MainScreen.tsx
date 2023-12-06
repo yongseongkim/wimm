@@ -1,11 +1,13 @@
 import {Transaction} from '@/models';
 import {TransactionManager} from '@/utils';
+import isUndefined from 'lodash/isUndefined';
 import moment from 'moment';
 import React, {useEffect, useState} from 'react';
 import {ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {atom, useRecoilState} from 'recoil';
 import styled from 'styled-components/native';
+import DailyListView from './__components__/DailyListView';
 import MonthlyGridView from './__components__/MonthlyGridView';
 import MonthlyStatisticsView from './__components__/MonthlyStatisticsView';
 
@@ -16,6 +18,7 @@ export const transactionsState = atom<Transaction[]>({
 
 const MainScreen = ({navigation}: any) => {
   const [selectedMonth, setSelectedMonth] = useState(moment().startOf('month'));
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const year = selectedMonth.year();
   const month = selectedMonth.month() + 1;
 
@@ -61,15 +64,32 @@ const MainScreen = ({navigation}: any) => {
             )}
             onPressPreviousMonth={() => {
               setSelectedMonth(selectedMonth.add(-1, 'month').clone());
+              setSelectedDate(undefined);
             }}
             onPressNextMonth={() => {
               setSelectedMonth(selectedMonth.add(+1, 'month').clone());
+              setSelectedDate(undefined);
             }}
             onPressAddTransaction={() => {
               navigation.navigate('TransactionForm');
             }}
           />
-          <MonthlyGridView year={year} month={month} />
+          <MonthlyGridView
+            year={year}
+            month={month}
+            selectedDay={selectedDate?.getDate()}
+            onSelectDate={date => {
+              if (
+                !isUndefined(selectedDate) &&
+                selectedDate.getDate() === date.getDate()
+              ) {
+                setSelectedDate(undefined);
+              } else {
+                setSelectedDate(date);
+              }
+            }}
+          />
+          <DailyListView selectedDate={selectedDate} />
         </Container>
       </SafeAreaView>
     </ScrollView>
