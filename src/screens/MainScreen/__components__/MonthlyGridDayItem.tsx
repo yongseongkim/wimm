@@ -40,18 +40,18 @@ const MonthlyGridDayItem = ({
           {day}
         </DayText>
         <Contents>
-          <IncomeText
-            allowFontScaling={false}
-            numberOfLines={1}
-            textColor={Color.Gray500}>
-            {`+${income}`}
-          </IncomeText>
           <ExpenseText
             allowFontScaling={false}
             numberOfLines={1}
-            textColor={Color.Blue600}>
+            textColor={Color.Gray500}>
             {`-${expense}`}
           </ExpenseText>
+          <IncomeText
+            allowFontScaling={false}
+            numberOfLines={1}
+            textColor={Color.Blue600}>
+            {`+${income}`}
+          </IncomeText>
         </Contents>
       </Container>
     </TouchableHighlight>

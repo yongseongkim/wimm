@@ -8,9 +8,14 @@ import DailyListItem from './DailyListItem';
 interface PropsType {
   selectedDate?: Date;
   transactions: TransactionModel[];
+  onPressTransaction?: (transaction: TransactionModel) => void;
 }
 
-const DailyListView = ({selectedDate, transactions}: PropsType) => {
+const DailyListView = ({
+  selectedDate,
+  transactions,
+  onPressTransaction,
+}: PropsType) => {
   const dailyTransactions = useMemo(() => {
     const result = sortBy(
       isUndefined(selectedDate)
@@ -29,6 +34,7 @@ const DailyListView = ({selectedDate, transactions}: PropsType) => {
         <DailyListItem
           key={transaction._id.toString()}
           transaction={transaction}
+          onPress={onPressTransaction}
         />
       ))}
     </Container>

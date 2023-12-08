@@ -9,6 +9,7 @@ import styled from 'styled-components/native';
 import DailyListView from './__components__/DailyListView';
 import MonthlyGridView from './__components__/MonthlyGridView';
 import MonthlyStatisticsView from './__components__/MonthlyStatisticsView';
+import {TransactionFormPropsType} from '../TransactionFormScreen';
 
 const MainScreen = ({navigation}: any) => {
   const [selectedMonth, setSelectedMonth] = useState(moment().startOf('month'));
@@ -73,6 +74,11 @@ const MainScreen = ({navigation}: any) => {
           <DailyListView
             transactions={transactions}
             selectedDate={selectedDate}
+            onPressTransaction={transaction => {
+              navigation.navigate('TransactionForm', {
+                transaction: transaction,
+              } as TransactionFormPropsType);
+            }}
           />
         </Container>
       </SafeAreaView>

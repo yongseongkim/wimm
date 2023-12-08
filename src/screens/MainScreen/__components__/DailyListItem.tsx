@@ -20,32 +20,40 @@ import {
   WonsignCircleFill,
   WonsignSquareFill,
 } from '@/assets';
-import {Color} from '@/colors';
+import {Color, ColorUtils} from '@/colors';
 import {TransactionModel} from '@/models/Transaction';
 import isEmpty from 'lodash/isEmpty';
+import {TouchableHighlight} from 'react-native';
 
 interface PropsType {
   transaction: TransactionModel;
+  onPress?: (transaction: TransactionModel) => void;
 }
 
-const DailyListItem = ({transaction}: PropsType) => {
+const DailyListItem = ({transaction, onPress}: PropsType) => {
   return (
-    <Container>
-      <Icon category={Category.fromString(transaction.category)} />
-      <Contents>
-        <Value>{`${transaction.value > 0 ? '+' : '-'} ${Intl.NumberFormat(
-          'ko-KR',
-          {
-            style: 'currency',
-            currency: 'KRW',
-          },
-        ).format(Math.abs(transaction.value))}`}</Value>
-        <Title>{transaction.title}</Title>
-        {!isEmpty(transaction.description) && (
-          <Description>{transaction.description}</Description>
-        )}
-      </Contents>
-    </Container>
+    <TouchableHighlight
+      underlayColor={ColorUtils.WithOpacity(Color.Blue500, 50)}
+      onPress={() => {
+        onPress?.(transaction);
+      }}>
+      <Container>
+        <Icon category={Category.fromString(transaction.category)} />
+        <Contents>
+          <Value>{`${transaction.value > 0 ? '+' : '-'} ${Intl.NumberFormat(
+            'ko-KR',
+            {
+              style: 'currency',
+              currency: 'KRW',
+            },
+          ).format(Math.abs(transaction.value))}`}</Value>
+          <Title>{transaction.title}</Title>
+          {!isEmpty(transaction.description) && (
+            <Description>{transaction.description}</Description>
+          )}
+        </Contents>
+      </Container>
+    </TouchableHighlight>
   );
 };
 

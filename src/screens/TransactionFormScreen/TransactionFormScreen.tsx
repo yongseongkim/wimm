@@ -5,6 +5,7 @@ import {SpoqaHanSans, XMark} from '@/assets';
 import {Color} from '@/colors';
 import MarginButton from '@/components/MarginButton';
 import {Category} from '@/models';
+import {TransactionModel} from '@/models/Transaction';
 import {DateFormatter} from '@/utils';
 import {useRealm} from '@realm/react';
 import {isEmpty, isUndefined} from 'lodash';
@@ -15,7 +16,7 @@ import CategorySelector from './__components__/CategorySelector';
 import TransactionTypeSelector from './__components__/TransactionTypeSelector';
 
 export interface TransactionFormPropsType {
-  initialDateTime?: Date;
+  transaction?: TransactionModel;
 }
 
 const TransactionFormScreen = ({route, navigation}: any) => {
@@ -25,14 +26,21 @@ const TransactionFormScreen = ({route, navigation}: any) => {
     TransactionType.Expense,
   );
 
-  const [value, setValue] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState(Category.Other);
+  const [value, setValue] = useState(Math.abs(params?.transaction?.value ?? 0));
+  const initialCategory = params?.transaction?.category;
+  const [selectedCategory, setSelectedCategory] = useState(
+    !isUndefined(initialCategory)
+      ? Category.fromString(initialCategory)
+      : Category.Other,
+  );
   const [isDateTimePickerOpen, setIsDateTimePickerOpen] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState<Date>(
-    params?.initialDateTime ?? new Date(),
+    params?.transaction?.tradedAt ?? new Date(),
   );
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState(params?.transaction?.title ?? '');
+  const [description, setDescription] = useState(
+    params?.transaction?.description ?? '',
+  );
 
   const realm = useRealm();
 
@@ -47,14 +55,24 @@ const TransactionFormScreen = ({route, navigation}: any) => {
     }
 
     realm.write(() => {
-      realm.create('Transaction', {
-        _id: new Realm.BSON.ObjectId(),
-        title,
-        description,
-        category: selectedCategory,
-        value: transactionType === TransactionType.Income ? value : -value,
-        tradedAt: selectedDateTime,
-      });
+      const valueWithType =
+        transactionType === TransactionType.Income ? value : -value;
+      if (!isUndefined(params.transaction)) {
+        params.transaction.title = title;
+        params.transaction.description = description;
+        params.transaction.category = selectedCategory;
+        params.transaction.value = valueWithType;
+        params.transaction.tradedAt = selectedDateTime;
+      } else {
+        realm.create('Transaction', {
+          _id: new Realm.BSON.ObjectId(),
+          title,
+          description,
+          category: selectedCategory,
+          value: valueWithType,
+          tradedAt: selectedDateTime,
+        });
+      }
     });
 
     navigation.goBack();
@@ -117,6 +135,7 @@ const TransactionFormScreen = ({route, navigation}: any) => {
           <CommonSection disabled={true}>
             <CommonSectionTitle>{'장소 / 용도'}</CommonSectionTitle>
             <CommonSectionValue
+              value={title}
               placeholder="입력해주세요"
               placeholderTextColor={Color.Gray500}
               onChangeText={text => {
@@ -128,6 +147,7 @@ const TransactionFormScreen = ({route, navigation}: any) => {
           <CommonSection disabled={true}>
             <CommonSectionTitle>상세 내용</CommonSectionTitle>
             <CommonSectionValue
+              value={description}
               placeholder="입력해주세요 (선택)"
               placeholderTextColor={Color.Gray500}
               onChangeText={text => {
