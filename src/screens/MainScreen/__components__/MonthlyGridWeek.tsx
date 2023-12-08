@@ -1,9 +1,8 @@
+import {TransactionModel} from '@/models/Transaction';
 import isNull from 'lodash/isNull';
 import React from 'react';
 import {View} from 'react-native';
-import {useRecoilValue} from 'recoil';
 import styled from 'styled-components/native';
-import {transactionsState} from '../MainScreen';
 import MonthlyGridDayItem from './MonthlyGridDayItem';
 
 interface PropsType {
@@ -12,6 +11,7 @@ interface PropsType {
   startOfFirstWeek: number;
   daysInMonth: number;
   selectedDay?: number;
+  transactions: TransactionModel[];
   onPressDay?: (day: number) => void;
 }
 
@@ -21,6 +21,7 @@ const MonthlyGridWeek = ({
   startOfFirstWeek,
   daysInMonth,
   selectedDay,
+  transactions,
   onPressDay,
 }: PropsType) => {
   let days;
@@ -41,8 +42,6 @@ const MonthlyGridWeek = ({
       return daysInMonth >= day ? day : null;
     });
   }
-
-  const transactions = useRecoilValue(transactionsState);
 
   return (
     <Container style={style}>

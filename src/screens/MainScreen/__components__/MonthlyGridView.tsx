@@ -1,3 +1,4 @@
+import {TransactionModel} from '@/models/Transaction';
 import moment from 'moment';
 import React from 'react';
 import styled from 'styled-components/native';
@@ -8,6 +9,7 @@ interface PropsType {
   year: number;
   month: number;
   selectedDay?: number;
+  transactions: TransactionModel[];
   onSelectDate?: (date: Date) => void;
 }
 
@@ -15,6 +17,7 @@ const MonthlyGridView = ({
   year,
   month,
   selectedDay,
+  transactions,
   onSelectDate,
 }: PropsType) => {
   const firstDate = moment(`${year}-${month}`, 'YYYY-MM').startOf('month');
@@ -35,6 +38,7 @@ const MonthlyGridView = ({
             startOfFirstWeek={startOfFirstWeek}
             daysInMonth={daysInMonth}
             selectedDay={selectedDay}
+            transactions={transactions}
             onPressDay={day => {
               onSelectDate?.(
                 moment(`${year}-${month}-${day}`, 'YYYY-MM-DD').toDate(),

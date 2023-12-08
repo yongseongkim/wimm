@@ -1,17 +1,16 @@
+import {TransactionModel} from '@/models/Transaction';
 import isUndefined from 'lodash/isUndefined';
 import sortBy from 'lodash/sortBy';
 import React, {useMemo} from 'react';
-import {useRecoilValue} from 'recoil';
 import styled from 'styled-components/native';
-import {transactionsState} from '../MainScreen';
 import DailyListItem from './DailyListItem';
 
 interface PropsType {
   selectedDate?: Date;
+  transactions: TransactionModel[];
 }
 
-const DailyListView = ({selectedDate}: PropsType) => {
-  const transactions = useRecoilValue(transactionsState);
+const DailyListView = ({selectedDate, transactions}: PropsType) => {
   const dailyTransactions = useMemo(() => {
     const result = sortBy(
       isUndefined(selectedDate)
@@ -27,7 +26,10 @@ const DailyListView = ({selectedDate}: PropsType) => {
   return (
     <Container>
       {dailyTransactions.map(transaction => (
-        <DailyListItem key={transaction.id} transaction={transaction} />
+        <DailyListItem
+          key={transaction._id.toString()}
+          transaction={transaction}
+        />
       ))}
     </Container>
   );

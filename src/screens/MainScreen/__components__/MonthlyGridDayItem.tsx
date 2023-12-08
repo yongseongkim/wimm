@@ -1,5 +1,5 @@
 import {Color} from '@/colors';
-import {Transaction} from '@/models';
+import {TransactionModel} from '@/models/Transaction';
 import React from 'react';
 import {TouchableHighlight} from 'react-native';
 import styled from 'styled-components/native';
@@ -7,7 +7,7 @@ import styled from 'styled-components/native';
 interface PropsType {
   style?: any;
   day?: number;
-  transactions: Transaction[];
+  transactions: TransactionModel[];
   isSelected: boolean;
   onPress?: () => void;
 }

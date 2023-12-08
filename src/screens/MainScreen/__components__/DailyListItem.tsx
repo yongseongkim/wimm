@@ -1,4 +1,4 @@
-import {Category, Transaction} from '@/models';
+import {Category} from '@/models';
 import React from 'react';
 import styled from 'styled-components/native';
 
@@ -21,16 +21,17 @@ import {
   WonsignSquareFill,
 } from '@/assets';
 import {Color} from '@/colors';
+import {TransactionModel} from '@/models/Transaction';
 import isEmpty from 'lodash/isEmpty';
 
 interface PropsType {
-  transaction: Transaction;
+  transaction: TransactionModel;
 }
 
 const DailyListItem = ({transaction}: PropsType) => {
   return (
     <Container>
-      <Icon category={transaction.category} />
+      <Icon category={Category.fromString(transaction.category)} />
       <Contents>
         <Value>{`${transaction.value > 0 ? '+' : '-'} ${Intl.NumberFormat(
           'ko-KR',

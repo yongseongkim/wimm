@@ -5,12 +5,11 @@ import {SpoqaHanSans, XMark} from '@/assets';
 import {Color} from '@/colors';
 import MarginButton from '@/components/MarginButton';
 import {Category} from '@/models';
-import {DateFormatter, TransactionManager} from '@/utils';
+import {DateFormatter} from '@/utils';
+import {useRealm} from '@realm/react';
 import {isEmpty, isUndefined} from 'lodash';
 import DatePicker from 'react-native-date-picker';
-import {useRecoilState} from 'recoil';
 import styled from 'styled-components/native';
-import {transactionsState} from '../MainScreen/MainScreen';
 import TransactionType from './TransactionType';
 import CategorySelector from './__components__/CategorySelector';
 import TransactionTypeSelector from './__components__/TransactionTypeSelector';
@@ -26,8 +25,6 @@ const TransactionFormScreen = ({route, navigation}: any) => {
     TransactionType.Expense,
   );
 
-  const [transactions, setTransactions] = useRecoilState(transactionsState);
-
   const [value, setValue] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState(Category.Other);
   const [isDateTimePickerOpen, setIsDateTimePickerOpen] = useState(false);
@@ -36,6 +33,8 @@ const TransactionFormScreen = ({route, navigation}: any) => {
   );
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+
+  const realm = useRealm();
 
   const onPressConfirm = async () => {
     if (
@@ -47,14 +46,16 @@ const TransactionFormScreen = ({route, navigation}: any) => {
       return;
     }
 
-    const inserted = await TransactionManager.getInstance().insertTransaction({
-      title,
-      description,
-      category: selectedCategory,
-      value: transactionType === TransactionType.Income ? value : -value,
-      tradedAt: selectedDateTime,
+    realm.write(() => {
+      realm.create('Transaction', {
+        _id: new Realm.BSON.ObjectId(),
+        title,
+        description,
+        category: selectedCategory,
+        value: transactionType === TransactionType.Income ? value : -value,
+        tradedAt: selectedDateTime,
+      });
     });
-    setTransactions(transactions.concat(inserted));
 
     navigation.goBack();
   };

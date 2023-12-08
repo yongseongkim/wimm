@@ -1,3 +1,5 @@
+import Realm, {ObjectSchema} from 'realm';
+
 export enum Category {
   // Income
   Salary = 'Salary', // 급여
@@ -20,6 +22,42 @@ export enum Category {
 }
 
 export namespace Category {
+  export function fromString(category: string): Category {
+    switch (category) {
+      case 'Salary':
+        return Category.Salary;
+      case 'Investment':
+        return Category.Investment;
+      case 'SideJob':
+        return Category.SideJob;
+      case 'Food':
+        return Category.Food;
+      case 'Transport':
+        return Category.Transport;
+      case 'Entertainment':
+        return Category.Entertainment;
+      case 'Travel':
+        return Category.Travel;
+      case 'Shopping':
+        return Category.Shopping;
+      case 'Beauty':
+        return Category.Beauty;
+      case 'Gift':
+        return Category.Gift;
+      case 'Communication':
+        return Category.Communication;
+      case 'Living':
+        return Category.Living;
+      case 'Hospital':
+        return Category.Hospital;
+      case 'Education':
+        return Category.Education;
+      case 'etc':
+        return Category.Other;
+    }
+    return Category.Other;
+  }
+
   export function getDisplayText(category: Category): string {
     switch (category) {
       case Category.Salary:
@@ -83,22 +121,27 @@ export namespace Category {
   }
 }
 
-export type Transaction = {
-  id: string;
-  title: string;
-  description: string;
-  category: Category;
-  value: number;
-  tradedAt: Date;
-  createdAt: Date;
-};
+export class TransactionModel extends Realm.Object<TransactionModel> {
+  _id!: Realm.BSON.ObjectId;
+  title!: string;
+  description!: string;
+  category!: string;
+  value!: number;
+  tradedAt!: Date;
+  createdAt!: Date;
 
-export namespace Transaction {
-  export function fromObject(obj: any): Transaction {
-    return {
-      ...obj,
-      tradedAt: new Date(obj.tradedAt),
-      createdAt: new Date(obj.createdAt),
-    };
-  }
+  // https://www.mongodb.com/docs/realm/sdk/react-native/model-data/data-types/property-types/#std-label-react-native-supported-property-types
+  static schema: ObjectSchema = {
+    name: 'Transaction',
+    properties: {
+      _id: {type: 'objectId', indexed: true},
+      title: {type: 'string', indexed: 'full-text'},
+      description: 'string',
+      category: {type: 'string', default: Category.Other},
+      value: {type: 'int', default: 0},
+      tradedAt: 'date',
+      createdAt: {type: 'date', default: new Date()},
+    },
+    primaryKey: '_id',
+  };
 }

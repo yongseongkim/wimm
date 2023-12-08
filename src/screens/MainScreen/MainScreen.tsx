@@ -1,20 +1,14 @@
-import {Transaction} from '@/models';
-import {TransactionManager} from '@/utils';
+import {TransactionModel} from '@/models/Transaction';
+import {useQuery} from '@realm/react';
 import isUndefined from 'lodash/isUndefined';
 import moment from 'moment';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {atom, useRecoilState} from 'recoil';
 import styled from 'styled-components/native';
 import DailyListView from './__components__/DailyListView';
 import MonthlyGridView from './__components__/MonthlyGridView';
 import MonthlyStatisticsView from './__components__/MonthlyStatisticsView';
-
-export const transactionsState = atom<Transaction[]>({
-  key: 'transactions',
-  default: [],
-});
 
 const MainScreen = ({navigation}: any) => {
   const [selectedMonth, setSelectedMonth] = useState(moment().startOf('month'));
@@ -22,28 +16,14 @@ const MainScreen = ({navigation}: any) => {
   const year = selectedMonth.year();
   const month = selectedMonth.month() + 1;
 
-  const [transactions, setTransactions] = useRecoilState(transactionsState);
-
-  useEffect(() => {
-    const getTransactions = async ({
-      year,
-      month,
-    }: {
-      year: number;
-      month: number;
-    }) => {
-      try {
-        const result = await TransactionManager.getInstance().getTransactions(
-          year,
-          month,
-        );
-        setTransactions(result);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    getTransactions({year, month});
-  }, [year, month]);
+  const transactionQuery = useQuery(TransactionModel, transactions =>
+    transactions.filtered(
+      '$0 <= tradedAt AND tradedAt < $1',
+      selectedMonth.toDate(),
+      selectedMonth.endOf('month').toDate(),
+    ),
+  );
+  const transactions = Array.from(transactionQuery);
 
   return (
     <ScrollView>
@@ -78,6 +58,7 @@ const MainScreen = ({navigation}: any) => {
             year={year}
             month={month}
             selectedDay={selectedDate?.getDate()}
+            transactions={transactions}
             onSelectDate={date => {
               if (
                 !isUndefined(selectedDate) &&
@@ -89,7 +70,10 @@ const MainScreen = ({navigation}: any) => {
               }
             }}
           />
-          <DailyListView selectedDate={selectedDate} />
+          <DailyListView
+            transactions={transactions}
+            selectedDate={selectedDate}
+          />
         </Container>
       </SafeAreaView>
     </ScrollView>
