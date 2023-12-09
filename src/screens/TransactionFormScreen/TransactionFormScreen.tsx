@@ -11,6 +11,7 @@ import {DateFormatter} from '@/utils';
 import {useRealm} from '@realm/react';
 import {isEmpty, isUndefined} from 'lodash';
 import DatePicker from 'react-native-date-picker';
+import Realm from 'realm';
 import styled from 'styled-components/native';
 import TransactionType from './TransactionType';
 import CategorySelector from './__components__/CategorySelector';
