@@ -28,7 +28,7 @@ interface PropsType {
 }
 
 const CategorySelectorItem = ({category, isSelected, onPress}: PropsType) => {
-  const width = 28;
+  const width = 24;
   const tintColor = isSelected ? Color.White : Color.Gray500;
 
   const [borderRadius, setBorderRadius] = useState(0);

@@ -6,6 +6,7 @@ import styled from 'styled-components/native';
 interface PropsType {
   style?: any;
   text: string;
+  textFont?: SpoqaHanSans;
   color: Color;
   backgroundColor: Color;
   onPress?: () => void;
@@ -14,13 +15,16 @@ interface PropsType {
 const MarginButton = ({
   style,
   text,
+  textFont = SpoqaHanSans.Bold,
   color,
   backgroundColor,
   onPress,
 }: PropsType) => {
   return (
     <Container style={style} color={backgroundColor} onPress={onPress}>
-      <Label color={color}>{text}</Label>
+      <Label color={color} font={textFont}>
+        {text}
+      </Label>
     </Container>
   );
 };
@@ -32,10 +36,11 @@ const Container = styled.Pressable<{color: Color}>`
   background-color: ${({color}) => color};
   justify-content: center;
   align-items: center;
+  border-radius: 8px;
 `;
 
-const Label = styled.Text<{color: Color}>`
+const Label = styled.Text<{color: Color; font: SpoqaHanSans}>`
   color: ${({color}) => color};
-  font-size: 20px;
-  font-family: ${SpoqaHanSans.Bold};
+  font-size: 15px;
+  font-family: ${({font}) => font};
 `;

@@ -4,6 +4,7 @@ import {ScrollView} from 'react-native';
 import {SpoqaHanSans, XMark} from '@/assets';
 import {Color} from '@/colors';
 import MarginButton from '@/components/MarginButton';
+import TextPopup from '@/components/TextPopup';
 import {Category} from '@/models';
 import {TransactionModel} from '@/models/Transaction';
 import {DateFormatter} from '@/utils';
@@ -20,13 +21,13 @@ export interface TransactionFormPropsType {
 }
 
 const TransactionFormScreen = ({route, navigation}: any) => {
-  const params = route.params as TransactionFormPropsType;
+  const params = (route.params as TransactionFormPropsType) ?? {};
 
   const [transactionType, setTransactionType] = useState<TransactionType>(
     TransactionType.Expense,
   );
 
-  const [value, setValue] = useState(Math.abs(params?.transaction?.value ?? 0));
+  const [value, setValue] = useState(Math.abs(params.transaction?.value ?? 0));
   const initialCategory = params?.transaction?.category;
   const [selectedCategory, setSelectedCategory] = useState(
     !isUndefined(initialCategory)
@@ -35,16 +36,16 @@ const TransactionFormScreen = ({route, navigation}: any) => {
   );
   const [isDateTimePickerOpen, setIsDateTimePickerOpen] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState<Date>(
-    params?.transaction?.tradedAt ?? new Date(),
+    params.transaction?.tradedAt ?? new Date(),
   );
-  const [title, setTitle] = useState(params?.transaction?.title ?? '');
+  const [title, setTitle] = useState(params.transaction?.title ?? '');
   const [description, setDescription] = useState(
-    params?.transaction?.description ?? '',
+    params.transaction?.description ?? '',
   );
 
   const realm = useRealm();
 
-  const onPressConfirm = async () => {
+  const onPressSave = async () => {
     if (
       isUndefined(transactionType) ||
       isUndefined(selectedDateTime) ||
@@ -75,6 +76,23 @@ const TransactionFormScreen = ({route, navigation}: any) => {
       }
     });
 
+    navigation.goBack();
+  };
+
+  const [isConfirmDeletePopupVisible, setIsConfirmDeletePopupVisibleVisible] =
+    useState(false);
+
+  const onPressDelete = async () => {
+    if (isUndefined(params.transaction)) {
+      return;
+    }
+    setIsConfirmDeletePopupVisibleVisible(true);
+  };
+
+  const onConfirmDelete = async () => {
+    realm.write(() => {
+      realm.delete(params.transaction);
+    });
     navigation.goBack();
   };
 
@@ -171,13 +189,29 @@ const TransactionFormScreen = ({route, navigation}: any) => {
         </Contents>
       </ScrollView>
       <ButtonContainer>
-        <ConfirmButton
-          text={'확인'}
+        <SaveButton
+          text={'저장'}
           color={Color.White}
           backgroundColor={Color.Blue600}
-          onPress={onPressConfirm}
+          onPress={onPressSave}
         />
+        {!isUndefined(params.transaction) && (
+          <DeleteButton
+            text={'삭제'}
+            color={Color.White}
+            backgroundColor={Color.Red600}
+            onPress={onPressDelete}
+          />
+        )}
       </ButtonContainer>
+      <TextPopup
+        isVisible={isConfirmDeletePopupVisible}
+        message="정말 삭제하시겠습니까?"
+        onPressCancel={() => {
+          setIsConfirmDeletePopupVisibleVisible(false);
+        }}
+        onPressConfirm={onConfirmDelete}
+      />
     </Container>
   );
 };
@@ -215,14 +249,14 @@ const CommonSection = styled.TouchableOpacity({
 const CommonSectionTitle = styled.Text({
   width: '30%',
   color: Color.Gray500,
-  fontSize: 16,
+  fontSize: 15,
   fontFamily: SpoqaHanSans.Regular,
 });
 
 const CommonSectionValue = styled.TextInput({
   flex: 1,
   color: Color.Black,
-  fontSize: 16,
+  fontSize: 15,
   fontFamily: SpoqaHanSans.Regular,
 });
 
@@ -234,18 +268,22 @@ const ValueInputContainer = styled.View({
 
 const ValueInput = styled.TextInput({
   flex: 1,
-  fontSize: 38,
+  fontSize: 35,
   fontFamily: SpoqaHanSans.Bold,
 });
 
 const ValueUnit = styled.Text({
-  fontSize: 38,
+  fontSize: 35,
   fontFamily: SpoqaHanSans.Bold,
   marginLeft: 3,
 });
 
 const ButtonContainer = styled.View({});
 
-const ConfirmButton = styled(MarginButton)`
+const SaveButton = styled(MarginButton)`
+  margin: 10px 20px;
+`;
+
+const DeleteButton = styled(MarginButton)`
   margin: 10px 20px;
 `;

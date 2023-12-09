@@ -78,12 +78,12 @@ const Header = styled.View({
 const HeaderTitle = styled.Text({
   width: '30%',
   color: Color.Gray500,
-  fontSize: 16,
+  fontSize: 15,
   fontFamily: SpoqaHanSans.Regular,
 });
 
 const HeaderText = styled.Text({
-  fontSize: 16,
+  fontSize: 15,
   fontFamily: SpoqaHanSans.Regular,
 });
 

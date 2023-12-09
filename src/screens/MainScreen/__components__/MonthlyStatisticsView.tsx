@@ -1,8 +1,9 @@
 import {GreaterThan, LessThan, SpoqaHanSans} from '@/assets';
 import {Color, ColorUtils} from '@/colors';
 import React from 'react';
-import {Pressable, Text, View} from 'react-native';
+import {View} from 'react-native';
 import styled from 'styled-components/native';
+import MonthlyStatisticsAddButton from './MonthlyStatisticsAddButton';
 
 interface PropsType {
   year: number;
@@ -74,24 +75,7 @@ const MonthlyStatisticsView = ({
             </StatisticsRowValue>
           </StatisticsRow>
         </StatisticsContainer>
-        <Pressable
-          style={{
-            width: 100,
-            height: 32,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: Color.Blue600,
-          }}
-          onPress={onPressAddTransaction}>
-          <Text
-            style={{
-              color: Color.White,
-              fontSize: 15,
-              fontFamily: SpoqaHanSans.Bold,
-            }}>
-            추가
-          </Text>
-        </Pressable>
+        <MonthlyStatisticsAddButton onPress={onPressAddTransaction} />
       </View>
     </Container>
   );

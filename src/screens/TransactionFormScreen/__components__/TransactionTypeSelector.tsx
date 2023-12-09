@@ -50,7 +50,7 @@ const Item = styled.Pressable<{isSelected: boolean}>`
 
 const ItemText = styled.Text<{isSelected: boolean}>`
   color: ${({isSelected}) => (isSelected ? Color.Blue600 : Color.Gray500)};
-  font-size: 16px;
+  font-size: 14px;
   font-family: ${SpoqaHanSans.Regular};
 `;
 
