@@ -18,6 +18,7 @@ import TransactionTypeSelector from './__components__/TransactionTypeSelector';
 
 export interface TransactionFormPropsType {
   transaction?: TransactionModel;
+  initialDate?: Date;
 }
 
 const TransactionFormScreen = ({route, navigation}: any) => {
@@ -36,7 +37,7 @@ const TransactionFormScreen = ({route, navigation}: any) => {
   );
   const [isDateTimePickerOpen, setIsDateTimePickerOpen] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState<Date>(
-    params.transaction?.tradedAt ?? new Date(),
+    params.initialDate ?? params.transaction?.tradedAt ?? new Date(),
   );
   const [title, setTitle] = useState(params.transaction?.title ?? '');
   const [description, setDescription] = useState(

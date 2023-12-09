@@ -52,7 +52,9 @@ const MainScreen = ({navigation}: any) => {
               setSelectedDate(undefined);
             }}
             onPressAddTransaction={() => {
-              navigation.navigate('TransactionForm');
+              navigation.navigate('TransactionForm', {
+                initialDate: selectedDate,
+              } as TransactionFormPropsType);
             }}
           />
           <MonthlyGridView
