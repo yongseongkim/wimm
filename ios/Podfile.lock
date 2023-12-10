@@ -523,6 +523,10 @@ PODS:
     - React-Core
   - RNDeviceInfo (10.11.0):
     - React-Core
+  - RNReanimated (3.6.1):
+    - RCT-Folly (= 2021.07.22.00)
+    - React-Core
+    - ReactCommon/turbomodule/core
   - RNScreens (3.27.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -607,6 +611,7 @@ DEPENDENCIES:
   - RealmJS (from `../node_modules/realm`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
+  - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -731,6 +736,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
+  RNReanimated:
+    :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   RNSVG:
@@ -803,6 +810,7 @@ SPEC CHECKSUMS:
   RealmJS: 578e16cf7c0b32c13a23b2df667b021bb3c36f1c
   RNCAsyncStorage: 687bb9e85dd3d45b966662440dcfc0cd962347e6
   RNDeviceInfo: bf8a32acbcb875f568217285d1793b0e8588c974
+  RNReanimated: fdbaa9c964bbab7fac50c90862b6cc5f041679b9
   RNScreens: 3c2d122f5e08c192e254c510b212306da97d2581
   RNSVG: 255767813dac22db1ec2062c8b7e7b856d4e5ae6
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17

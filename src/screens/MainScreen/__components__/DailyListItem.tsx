@@ -33,7 +33,7 @@ interface PropsType {
 const DailyListItem = ({transaction, onPress}: PropsType) => {
   return (
     <TouchableHighlight
-      underlayColor={ColorUtils.WithOpacity(Color.Blue500, 50)}
+      underlayColor={ColorUtils.WithOpacity(Color.Blue500, 0.5)}
       onPress={() => {
         onPress?.(transaction);
       }}>

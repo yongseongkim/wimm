@@ -55,7 +55,7 @@ export default TextPopup;
 
 const Dim = styled.View({
   flex: 1,
-  backgroundColor: ColorUtils.WithOpacity(Color.Black, 40),
+  backgroundColor: ColorUtils.WithOpacity(Color.Black, 0.4),
   justifyContent: 'center',
   alignItems: 'center',
 });

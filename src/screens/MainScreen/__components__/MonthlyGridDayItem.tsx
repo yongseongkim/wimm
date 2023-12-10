@@ -30,7 +30,7 @@ const MonthlyGridDayItem = ({
   return (
     <TouchableHighlight
       style={style}
-      underlayColor={ColorUtils.WithOpacity(Color.Blue600, 20)}
+      underlayColor={ColorUtils.WithOpacity(Color.Blue600, 0.2)}
       onPress={onPress}>
       <Container>
         <DayText

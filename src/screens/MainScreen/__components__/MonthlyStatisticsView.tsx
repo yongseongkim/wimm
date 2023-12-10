@@ -26,7 +26,7 @@ const MonthlyStatisticsView = ({
     <Container>
       <SelectedMonthContainer>
         <SelectedMonthMover
-          underlayColor={ColorUtils.WithOpacity(Color.Blue500, 50)}
+          underlayColor={ColorUtils.WithOpacity(Color.Blue500, 0.5)}
           onPress={onPressPreviousMonth}>
           <LessThan
             width={moveIconSize}
@@ -36,7 +36,7 @@ const MonthlyStatisticsView = ({
         </SelectedMonthMover>
         <SelectedMonth>{`${year}년 ${month}월`}</SelectedMonth>
         <SelectedMonthMover
-          underlayColor={ColorUtils.WithOpacity(Color.Blue500, 50)}
+          underlayColor={ColorUtils.WithOpacity(Color.Blue500, 0.5)}
           onPress={onPressNextMonth}>
           <GreaterThan
             width={moveIconSize}

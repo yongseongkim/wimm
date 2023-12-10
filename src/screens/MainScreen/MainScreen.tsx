@@ -9,6 +9,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 import {TransactionFormPropsType} from '../TransactionFormScreen';
 import DailyListItem from './__components__/DailyListItem';
+import FloatingButtons from './__components__/FloatingButtons';
 import MonthlyHeader from './__components__/MonthlyHeader';
 
 const MainScreen = ({navigation}: any) => {
@@ -16,7 +17,6 @@ const MainScreen = ({navigation}: any) => {
 
   const [selectedMonth, setSelectedMonth] = useState(moment().startOf('month'));
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
-  console.log(selectedDate);
   const year = selectedMonth.year();
   const month = selectedMonth.month() + 1;
   const transactionQuery = useQuery(TransactionModel, transactions =>
@@ -35,6 +35,9 @@ const MainScreen = ({navigation}: any) => {
         ),
     t => t.tradedAt,
   ).reverse();
+
+  const [isFloatingButtonsExpanded, setIsFloatingButtonsExpanded] =
+    useState(false);
 
   const onPressTransaction = (transaction: TransactionModel) => {
     navigation.navigate('TransactionForm', {
@@ -75,6 +78,18 @@ const MainScreen = ({navigation}: any) => {
             }}
           />
         )}
+      />
+      <FloatingButtons
+        isExpanded={isFloatingButtonsExpanded}
+        onPress={() => {
+          setIsFloatingButtonsExpanded(!isFloatingButtonsExpanded);
+        }}
+        onPressCustomInput={() => {
+          navigation.navigate('TransactionForm', {
+            initialDate: selectedDate,
+          } as TransactionFormPropsType);
+        }}
+        onPressDocument={() => {}}
       />
     </Container>
   );
