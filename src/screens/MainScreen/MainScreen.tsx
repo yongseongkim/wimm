@@ -1,22 +1,24 @@
 import {TransactionModel} from '@/models/Transaction';
 import {useQuery} from '@realm/react';
 import isUndefined from 'lodash/isUndefined';
+import sortBy from 'lodash/sortBy';
 import moment from 'moment';
 import React, {useState} from 'react';
-import {ScrollView} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {FlatList} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
-import DailyListView from './__components__/DailyListView';
-import MonthlyGridView from './__components__/MonthlyGridView';
-import MonthlyStatisticsView from './__components__/MonthlyStatisticsView';
 import {TransactionFormPropsType} from '../TransactionFormScreen';
+import DailyListItem from './__components__/DailyListItem';
+import MonthlyHeader from './__components__/MonthlyHeader';
 
 const MainScreen = ({navigation}: any) => {
+  const safeAreaInsets = useSafeAreaInsets();
+
   const [selectedMonth, setSelectedMonth] = useState(moment().startOf('month'));
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+  console.log(selectedDate);
   const year = selectedMonth.year();
   const month = selectedMonth.month() + 1;
-
   const transactionQuery = useQuery(TransactionModel, transactions =>
     transactions.filtered(
       '$0 <= tradedAt AND tradedAt < $1',
@@ -25,71 +27,65 @@ const MainScreen = ({navigation}: any) => {
     ),
   );
   const transactions = Array.from(transactionQuery);
+  const dailyTransactions = sortBy(
+    isUndefined(selectedDate)
+      ? transactions
+      : transactions.filter(
+          t => t.tradedAt.getDate() === selectedDate?.getDate(),
+        ),
+    t => t.tradedAt,
+  ).reverse();
+
+  const onPressTransaction = (transaction: TransactionModel) => {
+    navigation.navigate('TransactionForm', {
+      transactionId: transaction._id.toString(),
+    } as TransactionFormPropsType);
+  };
 
   return (
-    <ScrollView>
-      <SafeAreaView>
-        <Container>
-          <MonthlyStatisticsView
+    <Container>
+      <FlatList
+        style={{flex: 1}}
+        data={dailyTransactions}
+        ListHeaderComponent={
+          <MonthlyHeaderWrapper
+            paddingTop={safeAreaInsets.top}
             year={year}
             month={month}
-            income={transactions
-              .map(transaction => transaction.value)
-              .filter(value => value > 0)
-              .reduce((acc, cur) => acc + cur, 0)}
-            expense={Math.abs(
-              transactions
-                .map(transaction => transaction.value)
-                .filter(value => value < 0)
-                .reduce((acc, cur) => acc + cur, 0),
-            )}
-            onPressPreviousMonth={() => {
+            transactions={transactions}
+            onPressMoveToPreviousMonth={() => {
               setSelectedMonth(selectedMonth.add(-1, 'month').clone());
               setSelectedDate(undefined);
             }}
-            onPressNextMonth={() => {
+            onPressMoveToNextMonth={() => {
               setSelectedMonth(selectedMonth.add(+1, 'month').clone());
               setSelectedDate(undefined);
             }}
-            onPressAddTransaction={() => {
-              navigation.navigate('TransactionForm', {
-                initialDate: selectedDate,
-              } as TransactionFormPropsType);
-            }}
-          />
-          <MonthlyGridView
-            year={year}
-            month={month}
-            selectedDay={selectedDate?.getDate()}
-            transactions={transactions}
             onSelectDate={date => {
-              if (
-                !isUndefined(selectedDate) &&
-                selectedDate.getDate() === date.getDate()
-              ) {
-                setSelectedDate(undefined);
-              } else {
-                setSelectedDate(date);
-              }
+              setSelectedDate(date);
             }}
           />
-          <DailyListView
-            transactions={transactions}
-            selectedDate={selectedDate}
-            onPressTransaction={transaction => {
-              navigation.navigate('TransactionForm', {
-                transaction: transaction,
-              } as TransactionFormPropsType);
+        }
+        keyExtractor={item => item._id.toString()}
+        renderItem={({item}) => (
+          <DailyListItem
+            transaction={item}
+            onPress={() => {
+              onPressTransaction(item);
             }}
           />
-        </Container>
-      </SafeAreaView>
-    </ScrollView>
+        )}
+      />
+    </Container>
   );
 };
 
 export default MainScreen;
 
-const Container = styled.View`
-  flex-direction: column;
+const Container = styled.View({
+  flex: 1,
+});
+
+const MonthlyHeaderWrapper = styled(MonthlyHeader)<{paddingTop: number}>`
+  padding-top: ${({paddingTop}) => paddingTop}px;
 `;

@@ -8,8 +8,8 @@ import TextPopup from '@/components/TextPopup';
 import {Category} from '@/models';
 import {TransactionModel} from '@/models/Transaction';
 import {DateFormatter} from '@/utils';
-import {useRealm} from '@realm/react';
-import {isEmpty, isUndefined} from 'lodash';
+import {useObject, useRealm} from '@realm/react';
+import {isEmpty, isNull, isUndefined} from 'lodash';
 import DatePicker from 'react-native-date-picker';
 import Realm from 'realm';
 import styled from 'styled-components/native';
@@ -18,19 +18,33 @@ import CategorySelector from './__components__/CategorySelector';
 import TransactionTypeSelector from './__components__/TransactionTypeSelector';
 
 export interface TransactionFormPropsType {
-  transaction?: TransactionModel;
+  transactionId?: string;
   initialDate?: Date;
 }
 
 const TransactionFormScreen = ({route, navigation}: any) => {
   const params = (route.params as TransactionFormPropsType) ?? {};
+  const realm = useRealm();
+
+  // Transaction 수정 시
+  const initialTransactionId = params.transactionId;
+  let savedTransaction: TransactionModel | null = null;
+  if (initialTransactionId) {
+    savedTransaction = useObject(
+      TransactionModel,
+      new Realm.BSON.ObjectId(initialTransactionId),
+    );
+  }
 
   const [transactionType, setTransactionType] = useState<TransactionType>(
-    TransactionType.Expense,
+    isNull(savedTransaction)
+      ? TransactionType.Expense
+      : savedTransaction?.value < 0
+      ? TransactionType.Expense
+      : TransactionType.Income,
   );
-
-  const [value, setValue] = useState(Math.abs(params.transaction?.value ?? 0));
-  const initialCategory = params?.transaction?.category;
+  const [value, setValue] = useState(Math.abs(savedTransaction?.value ?? 0));
+  const initialCategory = savedTransaction?.category;
   const [selectedCategory, setSelectedCategory] = useState(
     !isUndefined(initialCategory)
       ? Category.fromString(initialCategory)
@@ -38,14 +52,14 @@ const TransactionFormScreen = ({route, navigation}: any) => {
   );
   const [isDateTimePickerOpen, setIsDateTimePickerOpen] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState<Date>(
-    params.initialDate ?? params.transaction?.tradedAt ?? new Date(),
+    params.initialDate ?? savedTransaction?.tradedAt ?? new Date(),
   );
-  const [title, setTitle] = useState(params.transaction?.title ?? '');
+  const [title, setTitle] = useState(savedTransaction?.title ?? '');
   const [description, setDescription] = useState(
-    params.transaction?.description ?? '',
+    savedTransaction?.description ?? '',
   );
-
-  const realm = useRealm();
+  const [isConfirmDeletePopupVisible, setIsConfirmDeletePopupVisibleVisible] =
+    useState(false);
 
   const onPressSave = async () => {
     if (
@@ -60,12 +74,12 @@ const TransactionFormScreen = ({route, navigation}: any) => {
     realm.write(() => {
       const valueWithType =
         transactionType === TransactionType.Income ? value : -value;
-      if (!isUndefined(params.transaction)) {
-        params.transaction.title = title;
-        params.transaction.description = description;
-        params.transaction.category = selectedCategory;
-        params.transaction.value = valueWithType;
-        params.transaction.tradedAt = selectedDateTime;
+      if (!isNull(savedTransaction)) {
+        savedTransaction.title = title;
+        savedTransaction.description = description;
+        savedTransaction.category = selectedCategory;
+        savedTransaction.value = valueWithType;
+        savedTransaction.tradedAt = selectedDateTime;
       } else {
         realm.create('Transaction', {
           _id: new Realm.BSON.ObjectId(),
@@ -81,19 +95,19 @@ const TransactionFormScreen = ({route, navigation}: any) => {
     navigation.goBack();
   };
 
-  const [isConfirmDeletePopupVisible, setIsConfirmDeletePopupVisibleVisible] =
-    useState(false);
-
   const onPressDelete = async () => {
-    if (isUndefined(params.transaction)) {
+    if (isNull(savedTransaction)) {
       return;
     }
     setIsConfirmDeletePopupVisibleVisible(true);
   };
 
   const onConfirmDelete = async () => {
+    if (isNull(savedTransaction)) {
+      return;
+    }
     realm.write(() => {
-      realm.delete(params.transaction);
+      realm.delete(savedTransaction);
     });
     navigation.goBack();
   };
@@ -197,7 +211,7 @@ const TransactionFormScreen = ({route, navigation}: any) => {
           backgroundColor={Color.Blue600}
           onPress={onPressSave}
         />
-        {!isUndefined(params.transaction) && (
+        {!isNull(savedTransaction) && (
           <DeleteButton
             text={'삭제'}
             color={Color.White}

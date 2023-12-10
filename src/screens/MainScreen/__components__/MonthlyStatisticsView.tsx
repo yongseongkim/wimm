@@ -3,7 +3,6 @@ import {Color, ColorUtils} from '@/colors';
 import React from 'react';
 import {View} from 'react-native';
 import styled from 'styled-components/native';
-import MonthlyStatisticsAddButton from './MonthlyStatisticsAddButton';
 
 interface PropsType {
   year: number;
@@ -12,7 +11,6 @@ interface PropsType {
   expense: number;
   onPressPreviousMonth: () => void;
   onPressNextMonth: () => void;
-  onPressAddTransaction: () => void;
 }
 
 const MonthlyStatisticsView = ({
@@ -22,7 +20,6 @@ const MonthlyStatisticsView = ({
   expense,
   onPressPreviousMonth,
   onPressNextMonth,
-  onPressAddTransaction,
 }: PropsType) => {
   const moveIconSize = 12;
   return (
@@ -75,7 +72,6 @@ const MonthlyStatisticsView = ({
             </StatisticsRowValue>
           </StatisticsRow>
         </StatisticsContainer>
-        <MonthlyStatisticsAddButton onPress={onPressAddTransaction} />
       </View>
     </Container>
   );

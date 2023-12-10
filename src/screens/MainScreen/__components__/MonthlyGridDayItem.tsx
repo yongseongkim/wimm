@@ -1,4 +1,4 @@
-import {Color} from '@/colors';
+import {Color, ColorUtils} from '@/colors';
 import {TransactionModel} from '@/models/Transaction';
 import React from 'react';
 import {TouchableHighlight} from 'react-native';
@@ -30,7 +30,7 @@ const MonthlyGridDayItem = ({
   return (
     <TouchableHighlight
       style={style}
-      underlayColor={Color.Transparent}
+      underlayColor={ColorUtils.WithOpacity(Color.Blue600, 20)}
       onPress={onPress}>
       <Container>
         <DayText
