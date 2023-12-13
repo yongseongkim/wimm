@@ -55,7 +55,7 @@ const CategorySelectorItem = ({category, isSelected, onPress}: PropsType) => {
       {category === Category.Food && (
         <ForkKnife width={width} height={width} color={tintColor} />
       )}
-      {category === Category.Transport && (
+      {category === Category.Transportation && (
         <TramFill width={width} height={width} color={tintColor} />
       )}
       {category === Category.Entertainment && (

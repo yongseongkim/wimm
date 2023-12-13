@@ -8,7 +8,7 @@ export enum Category {
 
   // Expense
   Food = 'Food', // 식사/간식
-  Transport = 'Transport', // 교통
+  Transportation = 'Transportation', // 교통
   Entertainment = 'Entertainment', // 문화/여가
   Travel = 'Travel', // 여행
   Shopping = 'Shopping', // 쇼핑
@@ -33,7 +33,7 @@ export namespace Category {
       case 'food':
         return Category.Food;
       case 'transport':
-        return Category.Transport;
+        return Category.Transportation;
       case 'entertainment':
         return Category.Entertainment;
       case 'travel':
@@ -68,7 +68,7 @@ export namespace Category {
         return '부업';
       case Category.Food:
         return '식사 / 간식';
-      case Category.Transport:
+      case Category.Transportation:
         return '교통';
       case Category.Entertainment:
         return '문화 / 여가';
@@ -106,7 +106,7 @@ export namespace Category {
   export function categoriesForExpense(): Category[] {
     return [
       Category.Food,
-      Category.Transport,
+      Category.Transportation,
       Category.Entertainment,
       Category.Travel,
       Category.Shopping,

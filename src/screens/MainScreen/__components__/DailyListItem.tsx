@@ -76,7 +76,7 @@ const Icon = ({category}: {category: Category}) => {
       {category === Category.Food && (
         <ForkKnife width={width} height={width} color={tintColor} />
       )}
-      {category === Category.Transport && (
+      {category === Category.Transportation && (
         <TramFill width={width} height={width} color={tintColor} />
       )}
       {category === Category.Entertainment && (
