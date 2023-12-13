@@ -1,6 +1,6 @@
 import {TransactionModel} from '@/models/Transaction';
 import {DateFormatter, ifLet} from '@/utils';
-import {useQuery} from '@realm/react';
+import {useRealm} from '@realm/react';
 import {isNull} from 'lodash';
 import isUndefined from 'lodash/isUndefined';
 import sortBy from 'lodash/sortBy';
@@ -17,20 +17,21 @@ import FloatingButtons from './__components__/FloatingButtons';
 import MonthlyHeader from './__components__/MonthlyHeader';
 
 const MainScreen = ({navigation}: any) => {
+  const realm = useRealm();
   const safeAreaInsets = useSafeAreaInsets();
 
   const [selectedMonth, setSelectedMonth] = useState(moment().startOf('month'));
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const year = selectedMonth.year();
   const month = selectedMonth.month() + 1;
-  const transactionQuery = useQuery(TransactionModel, transactions =>
-    transactions.filtered(
-      '$0 <= tradedAt AND tradedAt < $1',
-      selectedMonth.toDate(),
+
+  const transactions = realm
+    .objects(TransactionModel)
+    .filtered(
+      '$0 <= tradedAt && tradedAt < $1',
+      selectedMonth.startOf('month').toDate(),
       selectedMonth.endOf('month').toDate(),
-    ),
-  );
-  const transactions = Array.from(transactionQuery);
+    );
   const dailyTransactions = sortBy(
     isUndefined(selectedDate)
       ? transactions
@@ -78,7 +79,7 @@ const MainScreen = ({navigation}: any) => {
             year={year}
             month={month}
             selectedDate={selectedDate}
-            transactions={transactions}
+            transactions={Array.from(transactions.values())}
             onPressMoveToPreviousMonth={() => {
               setSelectedMonth(selectedMonth.add(-1, 'month').clone());
               setSelectedDate(undefined);
