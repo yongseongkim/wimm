@@ -1,4 +1,5 @@
 import {TransactionModel} from '@/models/Transaction';
+import {DateFormatter, ifLet} from '@/utils';
 import {useQuery} from '@realm/react';
 import {isNull} from 'lodash';
 import isUndefined from 'lodash/isUndefined';
@@ -76,6 +77,7 @@ const MainScreen = ({navigation}: any) => {
             paddingTop={safeAreaInsets.top}
             year={year}
             month={month}
+            selectedDate={selectedDate}
             transactions={transactions}
             onPressMoveToPreviousMonth={() => {
               setSelectedMonth(selectedMonth.add(-1, 'month').clone());
@@ -107,7 +109,9 @@ const MainScreen = ({navigation}: any) => {
         }}
         onPressCustomInput={() => {
           navigation.navigate('TransactionForm', {
-            initialDate: selectedDate,
+            initialDateString: ifLet(selectedDate, date =>
+              DateFormatter.formatInForm(date),
+            ),
           } as TransactionFormPropsType);
         }}
         onPressDocument={onPressDocument}

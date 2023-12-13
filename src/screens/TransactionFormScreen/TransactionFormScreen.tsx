@@ -7,7 +7,7 @@ import MarginButton from '@/components/MarginButton';
 import TextPopup from '@/components/TextPopup';
 import {Category} from '@/models';
 import {TransactionModel} from '@/models/Transaction';
-import {DateFormatter} from '@/utils';
+import {DateFormatter, ifLet} from '@/utils';
 import {useObject, useRealm} from '@realm/react';
 import {isEmpty, isNull, isUndefined} from 'lodash';
 import DatePicker from 'react-native-date-picker';
@@ -17,13 +17,13 @@ import TransactionType from './TransactionType';
 import CategorySelector from './__components__/CategorySelector';
 import TransactionTypeSelector from './__components__/TransactionTypeSelector';
 
-export interface TransactionFormPropsType {
+export interface PropsType {
   transactionId?: string;
-  initialDate?: Date;
+  initialDateString?: string;
 }
 
 const TransactionFormScreen = ({route, navigation}: any) => {
-  const params = (route.params as TransactionFormPropsType) ?? {};
+  const params = (route.params as PropsType) ?? {};
   const realm = useRealm();
 
   // Transaction 수정 시
@@ -50,9 +50,12 @@ const TransactionFormScreen = ({route, navigation}: any) => {
       ? Category.fromString(initialCategory)
       : Category.Other,
   );
+
   const [isDateTimePickerOpen, setIsDateTimePickerOpen] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState<Date>(
-    params.initialDate ?? savedTransaction?.tradedAt ?? new Date(),
+    ifLet(params.initialDateString, str => DateFormatter.dateInForm(str)) ??
+      savedTransaction?.tradedAt ??
+      new Date(),
   );
   const [title, setTitle] = useState(savedTransaction?.title ?? '');
   const [description, setDescription] = useState(
@@ -71,26 +74,26 @@ const TransactionFormScreen = ({route, navigation}: any) => {
       return;
     }
 
-    realm.write(() => {
-      const valueWithType =
-        transactionType === TransactionType.Income ? value : -value;
-      if (!isNull(savedTransaction)) {
-        savedTransaction.title = title;
-        savedTransaction.description = description;
-        savedTransaction.category = selectedCategory;
-        savedTransaction.value = valueWithType;
-        savedTransaction.tradedAt = selectedDateTime;
-      } else {
-        realm.create('Transaction', {
-          _id: new Realm.BSON.ObjectId(),
-          title,
-          description,
-          category: selectedCategory,
-          value: valueWithType,
-          tradedAt: selectedDateTime,
-        });
-      }
-    });
+    realm.beginTransaction();
+    const valueWithType =
+      transactionType === TransactionType.Income ? value : -value;
+    if (!isNull(savedTransaction)) {
+      savedTransaction.title = title;
+      savedTransaction.description = description;
+      savedTransaction.category = selectedCategory;
+      savedTransaction.value = valueWithType;
+      savedTransaction.tradedAt = selectedDateTime;
+    } else {
+      realm.create('Transaction', {
+        _id: new Realm.BSON.ObjectId(),
+        title,
+        description,
+        category: selectedCategory,
+        value: valueWithType,
+        tradedAt: selectedDateTime,
+      });
+    }
+    realm.commitTransaction();
 
     navigation.goBack();
   };

@@ -1,2 +1,2 @@
 export {default} from './TransactionFormScreen';
-export type {TransactionFormPropsType} from './TransactionFormScreen';
+export type {PropsType as TransactionFormPropsType} from './TransactionFormScreen';
