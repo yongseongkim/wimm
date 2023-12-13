@@ -1,12 +1,15 @@
 import {TransactionModel} from '@/models/Transaction';
 import {useQuery} from '@realm/react';
+import {isNull} from 'lodash';
 import isUndefined from 'lodash/isUndefined';
 import sortBy from 'lodash/sortBy';
 import moment from 'moment';
 import React, {useState} from 'react';
 import {FlatList} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {pickSingle} from 'react-native-document-picker';
 import styled from 'styled-components/native';
+import {ImportCSVConfirmationPropsType} from '../ImportCSVConfirmation';
 import {TransactionFormPropsType} from '../TransactionFormScreen';
 import DailyListItem from './__components__/DailyListItem';
 import FloatingButtons from './__components__/FloatingButtons';
@@ -43,6 +46,24 @@ const MainScreen = ({navigation}: any) => {
     navigation.navigate('TransactionForm', {
       transactionId: transaction._id.toString(),
     } as TransactionFormPropsType);
+  };
+
+  const onPressDocument = async () => {
+    try {
+      const selectedFile = await pickSingle({
+        presentationStyle: 'fullScreen',
+        mode: 'import',
+        copyTo: 'cachesDirectory',
+        type: ['text/csv', 'public.comma-separated-values-text'],
+      });
+      if (!isNull(selectedFile.fileCopyUri)) {
+        navigation.navigate('ImportCSVConfirmation', {
+          csvFileUrl: selectedFile.fileCopyUri,
+        } as ImportCSVConfirmationPropsType);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -89,7 +110,7 @@ const MainScreen = ({navigation}: any) => {
             initialDate: selectedDate,
           } as TransactionFormPropsType);
         }}
-        onPressDocument={() => {}}
+        onPressDocument={onPressDocument}
       />
     </Container>
   );

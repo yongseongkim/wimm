@@ -14,6 +14,7 @@ import styled from 'styled-components/native';
 import FloatingActionButton, {
   FLOATING_ACTION_BUTTON_SIZE,
 } from './FloatingActionButton';
+import {TouchableHighlight} from 'react-native';
 
 interface PropsType {
   isExpanded: boolean;
@@ -87,12 +88,14 @@ const FloatingButtons = ({
         onPress={onPressDocument}>
         <FolderFillBadgePlus width={24} height={24} color={Color.White} />
       </FloatingActionButton>
-      <ExpandButton
-        underlayColor={ColorUtils.WithOpacity(Color.Blue600, 0.6)}
-        onPress={onPress}>
-        <Animated.View style={{transform: [{rotate: expandRotate}]}}>
-          <Plus width={24} height={24} color={Color.White} />
-        </Animated.View>
+      <ExpandButton>
+        <TouchableHighlight
+          underlayColor={ColorUtils.WithOpacity(Color.Blue600, 0.6)}
+          onPress={onPress}>
+          <Animated.View style={{transform: [{rotate: expandRotate}]}}>
+            <Plus width={24} height={24} color={Color.White} />
+          </Animated.View>
+        </TouchableHighlight>
       </ExpandButton>
     </Container>
   );
@@ -111,7 +114,7 @@ const Container = styled.View<{safeAreaBottomInset: number}>`
   margin-bottom: ${({safeAreaBottomInset}) => safeAreaBottomInset + 25}px;
 `;
 
-const ExpandButton = styled.TouchableHighlight`
+const ExpandButton = styled.View`
   width: ${EXPAND_BUTTON_SIZE}px;
   height: ${EXPAND_BUTTON_SIZE}px;
   border-radius: 28px;

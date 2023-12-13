@@ -38,5 +38,6 @@ const TouchableArea = styled.TouchableHighlight<{backgroundColor: Color}>`
   align-items: center;
   justify-content: center;
   background-color: ${({backgroundColor}) => backgroundColor};
+  /* TODO: error 해결하기 'View #3347 of type RCTView has a shadow set but cannot calculate shadow efficiently' */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 `;

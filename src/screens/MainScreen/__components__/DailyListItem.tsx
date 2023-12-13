@@ -48,8 +48,8 @@ const DailyListItem = ({transaction, onPress}: PropsType) => {
             },
           ).format(Math.abs(transaction.value))}`}</Value>
           <Title>{transaction.title}</Title>
-          {!isEmpty(transaction.description) && (
-            <Description>{transaction.description}</Description>
+          {!isEmpty(transaction.description.trim()) && (
+            <Description>{transaction.description.trim()}</Description>
           )}
         </Contents>
       </Container>
@@ -119,6 +119,7 @@ const Container = styled.View({
   alignItems: 'center',
   paddingVertical: 10,
   paddingHorizontal: 25,
+  height: 70,
 });
 
 const Contents = styled.View({

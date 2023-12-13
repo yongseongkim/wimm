@@ -1,9 +1,9 @@
 import {SpoqaHanSans} from '@/assets';
 import {Color, ColorUtils} from '@/colors';
-import MarginButton from '@/components/MarginButton';
 import React from 'react';
 import {Dimensions, Modal} from 'react-native';
 import styled from 'styled-components/native';
+import MarginButton from './MarginButton';
 
 interface PropsType {
   isVisible: boolean;

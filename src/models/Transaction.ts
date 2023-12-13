@@ -23,34 +23,34 @@ export enum Category {
 
 export namespace Category {
   export function fromString(category: string): Category {
-    switch (category) {
-      case 'Salary':
+    switch (category.trim().toLowerCase()) {
+      case 'salary':
         return Category.Salary;
-      case 'Investment':
+      case 'investment':
         return Category.Investment;
-      case 'SideJob':
+      case 'sidejob':
         return Category.SideJob;
-      case 'Food':
+      case 'food':
         return Category.Food;
-      case 'Transport':
+      case 'transport':
         return Category.Transport;
-      case 'Entertainment':
+      case 'entertainment':
         return Category.Entertainment;
-      case 'Travel':
+      case 'travel':
         return Category.Travel;
-      case 'Shopping':
+      case 'shopping':
         return Category.Shopping;
-      case 'Beauty':
+      case 'beauty':
         return Category.Beauty;
-      case 'Gift':
+      case 'gift':
         return Category.Gift;
-      case 'Communication':
+      case 'communication':
         return Category.Communication;
-      case 'Living':
+      case 'living':
         return Category.Living;
-      case 'Hospital':
+      case 'hospital':
         return Category.Hospital;
-      case 'Education':
+      case 'education':
         return Category.Education;
       case 'etc':
         return Category.Other;
