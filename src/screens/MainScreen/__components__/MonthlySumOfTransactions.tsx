@@ -13,7 +13,7 @@ interface PropsType {
   onPressNextMonth: () => void;
 }
 
-const MonthlyStatisticsView = ({
+const MonthlySumOfTransactions = ({
   year,
   month,
   income,
@@ -51,33 +51,33 @@ const MonthlyStatisticsView = ({
           alignItems: 'center',
           marginTop: 10,
         }}>
-        <StatisticsContainer>
-          <StatisticsRow>
-            <StatisticsRowTitle>수입</StatisticsRowTitle>
-            <StatisticsRowValue>
+        <SumContainer>
+          <SumRow>
+            <SumRowTitle>수입</SumRowTitle>
+            <SumRowValue>
               {Intl.NumberFormat('ko-KR', {
                 style: 'currency',
                 currency: 'KRW',
               }).format(income)}
-            </StatisticsRowValue>
-          </StatisticsRow>
-          <StatisticsRowSpacer />
-          <StatisticsRow>
-            <StatisticsRowTitle>지출</StatisticsRowTitle>
-            <StatisticsRowValue>
+            </SumRowValue>
+          </SumRow>
+          <SumRowSpacer />
+          <SumRow>
+            <SumRowTitle>지출</SumRowTitle>
+            <SumRowValue>
               {Intl.NumberFormat('ko-KR', {
                 style: 'currency',
                 currency: 'KRW',
               }).format(expense)}
-            </StatisticsRowValue>
-          </StatisticsRow>
-        </StatisticsContainer>
+            </SumRowValue>
+          </SumRow>
+        </SumContainer>
       </View>
     </Container>
   );
 };
 
-export default MonthlyStatisticsView;
+export default MonthlySumOfTransactions;
 
 const Container = styled.View`
   flex-direction: column;
@@ -100,28 +100,28 @@ const SelectedMonth = styled.Text`
   font-family: ${SpoqaHanSans.Bold};
 `;
 
-const StatisticsContainer = styled.View`
+const SumContainer = styled.View`
   flex: 1;
   flex-direction: column;
 `;
 
-const StatisticsRowSpacer = styled.View`
+const SumRowSpacer = styled.View`
   height: 5px;
 `;
 
-const StatisticsRow = styled.View`
+const SumRow = styled.View`
   flex-direction: row;
   align-items: center;
 `;
 
-const StatisticsRowTitle = styled.Text`
+const SumRowTitle = styled.Text`
   color: ${Color.Black};
   font-size: 13px;
   font-family: ${SpoqaHanSans.Regular};
   margin-right: 10px;
 `;
 
-const StatisticsRowValue = styled.Text`
+const SumRowValue = styled.Text`
   color: ${Color.Black};
   font-size: 14px;
   font-family: ${SpoqaHanSans.Bold};

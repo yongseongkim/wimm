@@ -2,7 +2,7 @@ import {Color} from '@/colors';
 import React from 'react';
 import styled from 'styled-components/native';
 
-const MonthlyGridWeekHeader = () => {
+const CalendarWeekHeader = () => {
   return (
     <Container>
       <Weekend>일</Weekend>
@@ -16,7 +16,7 @@ const MonthlyGridWeekHeader = () => {
   );
 };
 
-export default MonthlyGridWeekHeader;
+export default CalendarWeekHeader;
 
 const Container = styled.View`
   flex: 1;

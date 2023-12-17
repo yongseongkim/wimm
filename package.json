@@ -15,6 +15,7 @@
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",
     "@realm/react": "^0.6.2",
+    "@shopify/flash-list": "^1.6.3",
     "@types/lodash": "^4.14.202",
     "@types/uuid": "^9.0.7",
     "appcenter": "5.0.0",

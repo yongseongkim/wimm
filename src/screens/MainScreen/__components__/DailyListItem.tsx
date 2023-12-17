@@ -33,7 +33,7 @@ interface PropsType {
 const DailyListItem = ({transaction, onPress}: PropsType) => {
   return (
     <TouchableHighlight
-      underlayColor={ColorUtils.WithOpacity(Color.Blue500, 0.5)}
+      underlayColor={ColorUtils.WithOpacity(Color.Blue500, 0.1)}
       onPress={() => {
         onPress?.(transaction);
       }}>
@@ -60,7 +60,7 @@ const DailyListItem = ({transaction, onPress}: PropsType) => {
 export default DailyListItem;
 
 const Icon = ({category}: {category: Category}) => {
-  const width = 28;
+  const width = 24;
   const tintColor = Color.Gray500;
   return (
     <>
@@ -119,13 +119,12 @@ const Container = styled.View({
   alignItems: 'center',
   paddingVertical: 10,
   paddingHorizontal: 25,
-  height: 70,
 });
 
 const Contents = styled.View({
   flex: 1,
   flexDirection: 'column',
-  marginLeft: 15,
+  marginLeft: 20,
 });
 
 const Value = styled.Text({

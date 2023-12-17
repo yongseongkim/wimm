@@ -26,6 +26,6 @@ export const Color = {
 
 export namespace ColorUtils {
   export function WithOpacity(color: Color, opacity: number) {
-    return `${color}${(255 * opacity).toString(16)}`;
+    return `${color}${Math.floor(255 * opacity).toString(16)}`;
   }
 }

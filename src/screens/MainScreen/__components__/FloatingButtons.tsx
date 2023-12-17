@@ -1,6 +1,7 @@
 import {FolderFillBadgePlus, Plus, SquareAndPencil} from '@/assets';
 import {Color, ColorUtils} from '@/colors';
 import React, {useEffect} from 'react';
+import {TouchableHighlight} from 'react-native';
 import Animated, {
   Easing,
   ReduceMotion,
@@ -14,7 +15,6 @@ import styled from 'styled-components/native';
 import FloatingActionButton, {
   FLOATING_ACTION_BUTTON_SIZE,
 } from './FloatingActionButton';
-import {TouchableHighlight} from 'react-native';
 
 interface PropsType {
   isExpanded: boolean;
@@ -105,7 +105,6 @@ export default FloatingButtons;
 
 const Container = styled.View<{safeAreaBottomInset: number}>`
   position: absolute;
-  height: 100%;
   right: 14px;
   bottom: 10px;
   flex-direction: column;

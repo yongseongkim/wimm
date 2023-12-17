@@ -2,8 +2,8 @@ import {TransactionModel} from '@/models/Transaction';
 import moment from 'moment';
 import React from 'react';
 import styled from 'styled-components/native';
-import MonthlyGridWeek from './MonthlyGridWeek';
-import MonthlyGridWeekHeader from './MonthlyGridWeekHeader';
+import CalendarWeek from './CalendarWeek';
+import MonthlyGridWeekHeader from './CalendarWeekHeader';
 
 interface PropsType {
   year: number;
@@ -13,7 +13,7 @@ interface PropsType {
   onSelectDate?: (date: Date) => void;
 }
 
-const MonthlyGridView = ({
+const Calendar = ({
   year,
   month,
   selectedDay,
@@ -32,7 +32,7 @@ const MonthlyGridView = ({
       {Array(numberOfWeeks)
         .fill(0)
         .map((_, index) => (
-          <MonthlyGridWeek
+          <CalendarWeek
             key={`${year}-${month}-${index}`}
             week={index}
             startOfFirstWeek={startOfFirstWeek}
@@ -50,7 +50,7 @@ const MonthlyGridView = ({
   );
 };
 
-export default MonthlyGridView;
+export default Calendar;
 
 const Container = styled.View`
   flex: 1;

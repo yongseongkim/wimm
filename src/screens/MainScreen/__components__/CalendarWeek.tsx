@@ -3,7 +3,7 @@ import isNull from 'lodash/isNull';
 import React from 'react';
 import {View} from 'react-native';
 import styled from 'styled-components/native';
-import MonthlyGridDayItem from './MonthlyGridDayItem';
+import CalendarDay from './CalendarDay';
 
 interface PropsType {
   style?: any;
@@ -15,7 +15,7 @@ interface PropsType {
   onPressDay?: (day: number) => void;
 }
 
-const MonthlyGridWeek = ({
+const CalendarWeek = ({
   style,
   week,
   startOfFirstWeek,
@@ -49,7 +49,7 @@ const MonthlyGridWeek = ({
         isNull(day) ? (
           <View key={`${week}_${index}`} style={{flex: 1}} />
         ) : (
-          <MonthlyGridDayItemWrapper
+          <CalendarDayWrapper
             key={day}
             day={day}
             transactions={transactions.filter(
@@ -66,12 +66,12 @@ const MonthlyGridWeek = ({
   );
 };
 
-export default MonthlyGridWeek;
+export default CalendarWeek;
 
 const Container = styled.View`
   flex-direction: row;
 `;
 
-const MonthlyGridDayItemWrapper = styled(MonthlyGridDayItem)`
+const CalendarDayWrapper = styled(CalendarDay)`
   flex: 1;
 `;

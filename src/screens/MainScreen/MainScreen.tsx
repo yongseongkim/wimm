@@ -1,50 +1,26 @@
 import {TransactionModel} from '@/models/Transaction';
 import {DateFormatter, ifLet} from '@/utils';
-import {useRealm} from '@realm/react';
 import {isNull} from 'lodash';
-import isUndefined from 'lodash/isUndefined';
-import sortBy from 'lodash/sortBy';
 import moment from 'moment';
 import React, {useState} from 'react';
-import {FlatList} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {pickSingle} from 'react-native-document-picker';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 import {ImportCSVConfirmationPropsType} from '../ImportCSVConfirmation';
 import {TransactionFormPropsType} from '../TransactionFormScreen';
-import DailyListItem from './__components__/DailyListItem';
 import FloatingButtons from './__components__/FloatingButtons';
-import MonthlyHeader from './__components__/MonthlyHeader';
+import MonthlyTransactions from './__components__/MonthlyTransactions';
 
 const MainScreen = ({navigation}: any) => {
-  const realm = useRealm();
-  const safeAreaInsets = useSafeAreaInsets();
-
   const [selectedMonth, setSelectedMonth] = useState(moment().startOf('month'));
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const year = selectedMonth.year();
   const month = selectedMonth.month() + 1;
 
-  const transactions = realm
-    .objects(TransactionModel)
-    .filtered(
-      '$0 <= tradedAt && tradedAt < $1',
-      selectedMonth.startOf('month').toDate(),
-      selectedMonth.endOf('month').toDate(),
-    );
-  const dailyTransactions = sortBy(
-    isUndefined(selectedDate)
-      ? transactions
-      : transactions.filter(
-          t => t.tradedAt.getDate() === selectedDate?.getDate(),
-        ),
-    t => t.tradedAt,
-  ).reverse();
-
   const [isFloatingButtonsExpanded, setIsFloatingButtonsExpanded] =
     useState(false);
 
-  const onPressTransaction = (transaction: TransactionModel) => {
+  const onSelectTransaction = (transaction: TransactionModel) => {
     navigation.navigate('TransactionForm', {
       transactionId: transaction._id.toString(),
     } as TransactionFormPropsType);
@@ -69,39 +45,22 @@ const MainScreen = ({navigation}: any) => {
   };
 
   return (
-    <Container>
-      <FlatList
-        style={{flex: 1}}
-        data={dailyTransactions}
-        ListHeaderComponent={
-          <MonthlyHeaderWrapper
-            paddingTop={safeAreaInsets.top}
-            year={year}
-            month={month}
-            selectedDate={selectedDate}
-            transactions={Array.from(transactions.values())}
-            onPressMoveToPreviousMonth={() => {
-              setSelectedMonth(selectedMonth.add(-1, 'month').clone());
-              setSelectedDate(undefined);
-            }}
-            onPressMoveToNextMonth={() => {
-              setSelectedMonth(selectedMonth.add(+1, 'month').clone());
-              setSelectedDate(undefined);
-            }}
-            onSelectDate={date => {
-              setSelectedDate(date);
-            }}
-          />
-        }
-        keyExtractor={item => item._id.toString()}
-        renderItem={({item}) => (
-          <DailyListItem
-            transaction={item}
-            onPress={() => {
-              onPressTransaction(item);
-            }}
-          />
-        )}
+    <Container edges={[]}>
+      <MonthlyTransactions
+        year={year}
+        month={month}
+        onPressMoveToPreviousMonth={() => {
+          setSelectedMonth(selectedMonth.clone().subtract(1, 'month'));
+          setSelectedDate(undefined);
+        }}
+        onPressMoveToNextMonth={() => {
+          setSelectedMonth(selectedMonth.clone().add(1, 'month'));
+          setSelectedDate(undefined);
+        }}
+        onSelectDate={date => {
+          setSelectedDate(date);
+        }}
+        onSelectTransaction={onSelectTransaction}
       />
       <FloatingButtons
         isExpanded={isFloatingButtonsExpanded}
@@ -123,10 +82,8 @@ const MainScreen = ({navigation}: any) => {
 
 export default MainScreen;
 
-const Container = styled.View({
-  flex: 1,
-});
-
-const MonthlyHeaderWrapper = styled(MonthlyHeader)<{paddingTop: number}>`
-  padding-top: ${({paddingTop}) => paddingTop}px;
+const Container = styled(SafeAreaView)`
+  flex: 1;
 `;
+
+const MonthlyHeaderWrapper = styled(MonthlyTransactions)``;

@@ -12,7 +12,7 @@ interface PropsType {
   onPress?: () => void;
 }
 
-const MonthlyGridDayItem = ({
+const CalendarDay = ({
   style,
   day,
   transactions,
@@ -58,7 +58,7 @@ const MonthlyGridDayItem = ({
   );
 };
 
-export default MonthlyGridDayItem;
+export default CalendarDay;
 
 const Container = styled.View`
   flex-direction: column;
