@@ -1,7 +1,6 @@
 import {FolderFillBadgePlus, Plus, SquareAndPencil} from '@/assets';
 import {Color, ColorUtils} from '@/colors';
 import React, {useEffect} from 'react';
-import {TouchableHighlight} from 'react-native';
 import Animated, {
   Easing,
   ReduceMotion,
@@ -23,7 +22,7 @@ interface PropsType {
   onPressDocument: () => void;
 }
 
-const EXPAND_BUTTON_SIZE = 56;
+const EXPAND_BUTTON_SIZE = 64;
 const FLOATING_ACTION_BUTTON_SPACING = 14;
 
 const FloatingButtons = ({
@@ -88,14 +87,12 @@ const FloatingButtons = ({
         onPress={onPressDocument}>
         <FolderFillBadgePlus width={24} height={24} color={Color.White} />
       </FloatingActionButton>
-      <ExpandButton>
-        <TouchableHighlight
-          underlayColor={ColorUtils.WithOpacity(Color.Blue600, 0.6)}
-          onPress={onPress}>
-          <Animated.View style={{transform: [{rotate: expandRotate}]}}>
-            <Plus width={24} height={24} color={Color.White} />
-          </Animated.View>
-        </TouchableHighlight>
+      <ExpandButton
+        underlayColor={ColorUtils.WithOpacity(Color.Blue600, 0.6)}
+        onPress={onPress}>
+        <Animated.View style={{transform: [{rotate: expandRotate}]}}>
+          <Plus width={32} height={32} color={Color.White} />
+        </Animated.View>
       </ExpandButton>
     </Container>
   );
@@ -105,7 +102,7 @@ export default FloatingButtons;
 
 const Container = styled.View<{safeAreaBottomInset: number}>`
   position: absolute;
-  right: 14px;
+  right: 12px;
   bottom: 10px;
   flex-direction: column;
   align-items: center;
@@ -113,10 +110,10 @@ const Container = styled.View<{safeAreaBottomInset: number}>`
   margin-bottom: ${({safeAreaBottomInset}) => safeAreaBottomInset + 25}px;
 `;
 
-const ExpandButton = styled.View`
+const ExpandButton = styled.TouchableHighlight`
   width: ${EXPAND_BUTTON_SIZE}px;
   height: ${EXPAND_BUTTON_SIZE}px;
-  border-radius: 28px;
+  border-radius: ${EXPAND_BUTTON_SIZE / 2}px;
   background-color: ${Color.Blue600};
   align-items: center;
   justify-content: center;

@@ -8,7 +8,7 @@ interface PropsType extends PropsWithChildren {
   onPress: () => void;
 }
 
-export const FLOATING_ACTION_BUTTON_SIZE = 48;
+export const FLOATING_ACTION_BUTTON_SIZE = 52;
 
 const FloatingActionButton = ({style, children, onPress}: PropsType) => {
   return (

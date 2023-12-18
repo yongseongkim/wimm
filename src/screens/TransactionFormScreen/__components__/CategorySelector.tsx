@@ -83,8 +83,10 @@ const HeaderTitle = styled.Text({
 });
 
 const HeaderText = styled.Text({
+  color: Color.Black,
   fontSize: 15,
   fontFamily: SpoqaHanSans.Regular,
+  marginLeft: 10,
 });
 
 const CategoryGrid = styled.View({

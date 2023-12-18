@@ -19,7 +19,7 @@ const ScreenStack = () => {
             options={{headerShown: false}}
           />
         </Stack.Group>
-        <Stack.Group screenOptions={{presentation: 'modal'}}>
+        <Stack.Group screenOptions={{presentation: 'fullScreenModal'}}>
           <Stack.Screen
             name="TransactionForm"
             component={TransactionFormScreen}

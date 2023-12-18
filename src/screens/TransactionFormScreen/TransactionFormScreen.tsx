@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {ScrollView} from 'react-native';
+import {KeyboardAvoidingView, Platform, ScrollView} from 'react-native';
 
 import {SpoqaHanSans, XMark} from '@/assets';
 import {Color} from '@/colors';
@@ -116,122 +116,128 @@ const TransactionFormScreen = ({route, navigation}: any) => {
   };
 
   return (
-    <Container>
-      <AppBar>
-        <Spacer />
-        <CloseButton
-          onPress={() => {
-            navigation.goBack();
-          }}>
-          <XMark width={20} height={20} />
-        </CloseButton>
-      </AppBar>
-      <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag">
-        <Contents>
-          <CommonSection disabled={true}>
-            <CommonSectionTitle>분류</CommonSectionTitle>
-            <TransactionTypeSelector
-              type={transactionType}
-              onPressType={type => {
-                setTransactionType(type);
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <Container>
+        <AppBar>
+          <Spacer />
+          <CloseButton
+            onPress={() => {
+              navigation.goBack();
+            }}>
+            <XMark width={20} height={20} />
+          </CloseButton>
+        </AppBar>
+        <ScrollView style={{flex: 1}} keyboardDismissMode="interactive">
+          <Contents>
+            <CommonSection style={{alignItems: 'center'}} disabled={true}>
+              <CommonSectionTitle>분류</CommonSectionTitle>
+              <TransactionTypeSelector
+                type={transactionType}
+                onPressType={type => {
+                  setTransactionType(type);
+                }}
+              />
+            </CommonSection>
+
+            <ValueInputContainer>
+              <ValueInput
+                value={value.toString()}
+                textAlign={'right'}
+                inputMode={'decimal'}
+                onChangeText={text => {
+                  setValue(parseInt(isEmpty(text) ? '0' : text, 10) ?? 0);
+                }}
+              />
+              <ValueUnit>원</ValueUnit>
+            </ValueInputContainer>
+
+            <CategorySelector
+              transactionType={transactionType}
+              selectedCategory={selectedCategory}
+              onChangeSelectedCategory={c => {
+                setSelectedCategory(c);
               }}
             />
-          </CommonSection>
 
-          <ValueInputContainer>
-            <ValueInput
-              value={value.toString()}
-              textAlign={'right'}
-              inputMode={'decimal'}
-              onChangeText={text => {
-                setValue(parseInt(isEmpty(text) ? '0' : text, 10) ?? 0);
+            <CommonSection onPress={() => setIsDateTimePickerOpen(true)}>
+              <CommonSectionTitle>날짜</CommonSectionTitle>
+              <CommonSectionValue
+                editable={false}
+                placeholder="선택해주세요"
+                pointerEvents="none"
+                placeholderTextColor={Color.Gray500}>
+                {selectedDateTime &&
+                  DateFormatter.formatInForm(selectedDateTime)}
+              </CommonSectionValue>
+            </CommonSection>
+
+            <CommonSection disabled={true}>
+              <CommonSectionTitle>{'장소 / 용도'}</CommonSectionTitle>
+              <CommonSectionValue
+                value={title}
+                placeholder="입력해주세요"
+                placeholderTextColor={Color.Gray500}
+                onChangeText={text => {
+                  setTitle(text);
+                }}
+              />
+            </CommonSection>
+
+            <CommonSection disabled={true}>
+              <CommonSectionTitle>상세 내용</CommonSectionTitle>
+              <CommonSectionValue
+                multiline={true}
+                value={description}
+                placeholder="입력해주세요 (선택)"
+                placeholderTextColor={Color.Gray500}
+                onChangeText={text => {
+                  setDescription(text);
+                }}
+              />
+            </CommonSection>
+
+            <DatePicker
+              modal
+              date={selectedDateTime ?? new Date()}
+              open={isDateTimePickerOpen}
+              onConfirm={date => {
+                setSelectedDateTime(date);
+                setIsDateTimePickerOpen(false);
+              }}
+              onCancel={() => {
+                setIsDateTimePickerOpen(false);
               }}
             />
-            <ValueUnit>원</ValueUnit>
-          </ValueInputContainer>
-
-          <CategorySelector
-            transactionType={transactionType}
-            selectedCategory={selectedCategory}
-            onChangeSelectedCategory={c => {
-              setSelectedCategory(c);
-            }}
-          />
-
-          <CommonSection onPress={() => setIsDateTimePickerOpen(true)}>
-            <CommonSectionTitle>날짜</CommonSectionTitle>
-            <CommonSectionValue
-              editable={false}
-              placeholder="선택해주세요"
-              pointerEvents="none"
-              placeholderTextColor={Color.Gray500}>
-              {selectedDateTime && DateFormatter.formatInForm(selectedDateTime)}
-            </CommonSectionValue>
-          </CommonSection>
-
-          <CommonSection disabled={true}>
-            <CommonSectionTitle>{'장소 / 용도'}</CommonSectionTitle>
-            <CommonSectionValue
-              value={title}
-              placeholder="입력해주세요"
-              placeholderTextColor={Color.Gray500}
-              onChangeText={text => {
-                setTitle(text);
-              }}
-            />
-          </CommonSection>
-
-          <CommonSection disabled={true}>
-            <CommonSectionTitle>상세 내용</CommonSectionTitle>
-            <CommonSectionValue
-              value={description}
-              placeholder="입력해주세요 (선택)"
-              placeholderTextColor={Color.Gray500}
-              onChangeText={text => {
-                setDescription(text);
-              }}
-            />
-          </CommonSection>
-
-          <DatePicker
-            modal
-            date={selectedDateTime ?? new Date()}
-            open={isDateTimePickerOpen}
-            onConfirm={date => {
-              setSelectedDateTime(date);
-              setIsDateTimePickerOpen(false);
-            }}
-            onCancel={() => {
-              setIsDateTimePickerOpen(false);
-            }}
-          />
-        </Contents>
-      </ScrollView>
-      <ButtonContainer>
-        <SaveButton
-          text={'저장'}
-          color={Color.White}
-          backgroundColor={Color.Blue600}
-          onPress={onPressSave}
-        />
-        {!isNull(savedTransaction) && (
-          <DeleteButton
-            text={'삭제'}
+          </Contents>
+        </ScrollView>
+        <ButtonContainer>
+          <SaveButton
+            text={'저장'}
             color={Color.White}
-            backgroundColor={Color.Red600}
-            onPress={onPressDelete}
+            backgroundColor={Color.Blue600}
+            onPress={onPressSave}
           />
-        )}
-      </ButtonContainer>
-      <TextPopup
-        isVisible={isConfirmDeletePopupVisible}
-        message="정말 삭제하시겠습니까?"
-        onPressCancel={() => {
-          setIsConfirmDeletePopupVisibleVisible(false);
-        }}
-        onPressConfirm={onConfirmDelete}
-      />
-    </Container>
+          {!isNull(savedTransaction) && (
+            <DeleteButton
+              text={'삭제'}
+              color={Color.White}
+              backgroundColor={Color.Red600}
+              onPress={onPressDelete}
+            />
+          )}
+        </ButtonContainer>
+        <TextPopup
+          isVisible={isConfirmDeletePopupVisible}
+          message="정말 삭제하시겠습니까?"
+          onPressCancel={() => {
+            setIsConfirmDeletePopupVisibleVisible(false);
+          }}
+          onPressConfirm={onConfirmDelete}
+        />
+      </Container>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -260,23 +266,25 @@ const Contents = styled.View({
 const Spacer = styled.View({flex: 1});
 
 const CommonSection = styled.TouchableOpacity({
-  height: 44,
   flexDirection: 'row',
-  alignItems: 'center',
+  alignItems: 'flex-start',
+  paddingVertical: 5,
 });
 
 const CommonSectionTitle = styled.Text({
   width: '30%',
   color: Color.Gray500,
-  fontSize: 15,
+  fontSize: 16,
   fontFamily: SpoqaHanSans.Regular,
 });
 
 const CommonSectionValue = styled.TextInput({
   flex: 1,
   color: Color.Black,
-  fontSize: 15,
+  fontSize: 16,
   fontFamily: SpoqaHanSans.Regular,
+  padding: 0, // TextInput 은 자동으로 들어가는 inset 이 있어서 제거.
+  marginLeft: 10,
 });
 
 const ValueInputContainer = styled.View({
@@ -292,9 +300,10 @@ const ValueInput = styled.TextInput({
 });
 
 const ValueUnit = styled.Text({
+  color: Color.Black,
   fontSize: 35,
   fontFamily: SpoqaHanSans.Bold,
-  marginLeft: 3,
+  marginLeft: 2,
 });
 
 const ButtonContainer = styled.View({});
