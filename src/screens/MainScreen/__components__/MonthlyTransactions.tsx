@@ -1,5 +1,5 @@
 import {TransactionModel} from '@/models/Transaction';
-import {useRealm} from '@realm/react';
+import {useQuery, useRealm} from '@realm/react';
 import {FlashList} from '@shopify/flash-list';
 import {sortBy} from 'lodash';
 import isUndefined from 'lodash/isUndefined';
@@ -47,13 +47,11 @@ const MonthlyTransactions = ({
   );
   const lastDayOfMonth = firstDayOfMonth.clone().endOf('month');
 
-  const transactions = realm
-    .objects(TransactionModel)
-    .filtered(
-      '$0 <= tradedAt && tradedAt < $1',
-      firstDayOfMonth.toDate(),
-      lastDayOfMonth.toDate(),
-    );
+  const transactions = useQuery(TransactionModel).filtered(
+    '$0 <= tradedAt && tradedAt < $1',
+    firstDayOfMonth.toDate(),
+    lastDayOfMonth.toDate(),
+  );
   const dailyTransactions = sortBy(
     isUndefined(selectedDate)
       ? transactions

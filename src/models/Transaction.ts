@@ -32,7 +32,7 @@ export namespace Category {
         return Category.SideJob;
       case 'food':
         return Category.Food;
-      case 'transport':
+      case 'transportation':
         return Category.Transportation;
       case 'entertainment':
         return Category.Entertainment;

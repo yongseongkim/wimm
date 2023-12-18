@@ -49,6 +49,7 @@ const MainScreen = ({navigation}: any) => {
       <MonthlyTransactions
         year={year}
         month={month}
+        selectedDate={selectedDate}
         onPressMoveToPreviousMonth={() => {
           setSelectedMonth(selectedMonth.clone().subtract(1, 'month'));
           setSelectedDate(undefined);
@@ -73,8 +74,12 @@ const MainScreen = ({navigation}: any) => {
               DateFormatter.formatInForm(date),
             ),
           } as TransactionFormPropsType);
+          setIsFloatingButtonsExpanded(false);
         }}
-        onPressDocument={onPressDocument}
+        onPressDocument={() => {
+          onPressDocument();
+          setIsFloatingButtonsExpanded(false);
+        }}
       />
     </Container>
   );
